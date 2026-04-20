@@ -1,0 +1,3203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Summer Splash Adventure - Created by Kortisha Yo'Londa Baker</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+  :root{--sun:#FFD700;--ocean:#00BFFF;--water:#1E90FF;--sand:#F4A460;--green:#32CD32;--coral:#FF6B6B;--purple:#9B59B6;--white:#FFFEF7;--dark:#2C3E50;--money:#2ECC71;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#87CEEB 0%,#E0F4FF 60%,#F0E68C 100%);min-height:100vh;overflow-x:hidden;}
+  #game-container{max-width:900px;margin:0 auto;padding:10px;position:relative;}
+  #top-bar{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#1E90FF,#00CED1);border-radius:20px;padding:10px 18px;margin-bottom:12px;box-shadow:0 4px 15px rgba(0,0,0,0.2);flex-wrap:wrap;gap:8px;position:relative;z-index:400;}
+  #money-display{font-family:'Fredoka One',cursive;font-size:1.4em;color:#FFD700;text-shadow:1px 1px 3px rgba(0,0,0,0.4);}
+  #top-buttons{display:flex;gap:8px;}
+  .top-btn{background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.6);color:white;font-family:'Fredoka One',cursive;font-size:0.9em;padding:6px 14px;border-radius:30px;cursor:pointer;transition:all 0.2s;}
+  .top-btn:hover{background:rgba(255,255,255,0.45);transform:scale(1.05);}
+  #stars-display{font-size:1.3em;color:#FFD700;text-shadow:0 0 8px rgba(255,215,0,0.7);}
+  #time-display{font-family:'Fredoka One',cursive;font-size:1.1em;color:white;background:rgba(0,0,0,0.2);padding:4px 12px;border-radius:20px;}
+  #miss-display{font-family:'Fredoka One',cursive;font-size:0.95em;color:#FFE4B5;}
+  .screen{display:none;} .screen.active{display:block;}
+  #welcome-screen{text-align:center;padding:30px 20px;}
+  #welcome-screen h1{font-family:'Fredoka One',cursive;font-size:2.8em;color:#1E90FF;text-shadow:3px 3px 0 #FFD700,5px 5px 0 rgba(0,0,0,0.1);margin-bottom:10px;line-height:1.1;}
+  .wave-emoji{font-size:3em;animation:wave 1.5s infinite;display:inline-block;}
+  @keyframes wave{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+  .intro-box{background:white;border-radius:20px;padding:24px;margin:20px 0;box-shadow:0 6px 25px rgba(0,0,0,0.1);text-align:left;border-left:6px solid var(--ocean);}
+  .intro-box p{font-size:1.1em;color:var(--dark);margin-bottom:10px;line-height:1.6;}
+  .big-btn{background:linear-gradient(135deg,#FF6B6B,#FF8E53);color:white;font-family:'Fredoka One',cursive;font-size:1.5em;padding:16px 40px;border:none;border-radius:50px;cursor:pointer;box-shadow:0 6px 20px rgba(255,107,107,0.4);transition:all 0.2s;margin-top:15px;}
+  .big-btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 10px 25px rgba(255,107,107,0.5);}
+  .big-btn:active{transform:scale(0.97);}
+  #store-screen{padding:10px;}
+  .screen-title{font-family:'Fredoka One',cursive;font-size:1.9em;color:var(--dark);text-align:center;margin-bottom:14px;text-shadow:2px 2px 0 rgba(0,0,0,0.08);}
+  .store-section{background:white;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 4px 15px rgba(0,0,0,0.08);}
+  .section-title{font-family:'Fredoka One',cursive;font-size:1.2em;color:var(--water);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .items-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;}
+  .store-item{border:2px solid #E8F4FD;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all 0.2s;background:#FAFEFF;position:relative;}
+  .store-item:hover{border-color:var(--ocean);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,191,255,0.2);}
+  .store-item.selected{border-color:var(--green);background:#F0FFF4;}
+  .item-emoji{font-size:2.2em;margin-bottom:6px;}
+  .item-name{font-size:0.8em;font-weight:700;color:var(--dark);margin-bottom:3px;}
+  .item-brand{font-size:0.7em;color:#888;margin-bottom:4px;}
+  .item-price{font-family:'Fredoka One',cursive;color:var(--money);font-size:1em;}
+  .qty-controls{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;}
+  .qty-btn{width:26px;height:26px;border-radius:50%;border:2px solid var(--ocean);background:white;font-size:1.1em;cursor:pointer;font-weight:bold;color:var(--water);display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+  .qty-btn:hover{background:var(--ocean);color:white;}
+  .qty-display{font-weight:700;font-size:1em;min-width:20px;text-align:center;}
+  .cart-summary{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border-radius:16px;padding:16px;margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;bottom:10px;}
+  .cart-total{font-family:'Fredoka One',cursive;font-size:1.3em;}
+  .cart-remaining{font-size:0.9em;opacity:0.85;}
+  .road-visual{background:linear-gradient(135deg,#74b9ff,#a29bfe);border-radius:20px;padding:20px;margin-bottom:14px;text-align:center;position:relative;overflow:hidden;min-height:120px;}
+  .car-emoji{font-size:3.5em;animation:drive 2s infinite linear;display:inline-block;}
+  @keyframes drive{0%{transform:translateX(-10px)}50%{transform:translateX(10px)}100%{transform:translateX(-10px)}}
+  .progress-road{background:rgba(0,0,0,0.2);border-radius:10px;height:14px;margin:10px 0;overflow:hidden;}
+  .progress-fill{background:linear-gradient(90deg,#FFD700,#FF6B6B);height:100%;border-radius:10px;transition:width 0.5s;min-width:5%;}
+  .road-info{display:flex;justify-content:space-between;color:white;font-weight:700;font-size:0.9em;margin-top:5px;}
+  .question-card{background:white;border-radius:20px;padding:22px;box-shadow:0 6px 25px rgba(0,0,0,0.1);margin-bottom:14px;border-top:5px solid var(--ocean);}
+  .question-type-badge{display:inline-block;padding:4px 14px;border-radius:20px;font-size:0.8em;font-weight:700;margin-bottom:10px;}
+  .badge-array{background:#E8F5E9;color:#2E7D32;}
+  .badge-money{background:#FFF8E1;color:#F57F17;}
+  .question-text{font-size:1.15em;font-weight:700;color:var(--dark);margin-bottom:14px;line-height:1.5;}
+  .array-visual{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin:12px 0;padding:12px;background:#F8FFFE;border-radius:12px;border:2px dashed #B2EBF2;}
+  .array-row{display:flex;gap:6px;}
+  .array-dot{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#FF6B6B,#FF8E53);border:2px solid #FF4444;}
+  .tip-box{background:linear-gradient(135deg,#E3F2FD,#E8EAF6);border-radius:12px;padding:12px 16px;margin-bottom:14px;border-left:4px solid #3F51B5;font-size:0.95em;color:#1A237E;line-height:1.6;}
+  .choices-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .choice-btn{padding:14px 10px;border:3px solid #E0E0E0;border-radius:14px;background:white;font-family:'Nunito',sans-serif;font-size:1em;font-weight:700;cursor:pointer;transition:all 0.2s;color:var(--dark);}
+  .choice-btn:hover{border-color:var(--ocean);background:#E8F8FF;transform:scale(1.02);}
+  .choice-btn.correct{border-color:var(--green);background:#F0FFF4;color:#1B5E20;animation:pulse-green 0.5s;}
+  .choice-btn.wrong{border-color:#FF5252;background:#FFF5F5;color:#B71C1C;animation:shake 0.4s;}
+  .choice-btn:disabled{cursor:not-allowed;opacity:0.7;}
+  @keyframes pulse-green{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .gas-alert{background:linear-gradient(135deg,#FF6B6B,#FF8E53);color:white;border-radius:18px;padding:20px;text-align:center;box-shadow:0 6px 20px rgba(255,107,107,0.4);margin-bottom:14px;}
+  .gas-alert h3{font-family:'Fredoka One',cursive;font-size:1.5em;margin-bottom:8px;}
+  .gas-alert p{font-size:1em;margin-bottom:10px;opacity:0.9;}
+  #clock-screen{padding:20px;text-align:center;}
+  .clock-face{width:220px;height:220px;border-radius:50%;background:white;border:8px solid #1E90FF;margin:20px auto;position:relative;box-shadow:0 8px 30px rgba(0,0,0,0.15),inset 0 2px 10px rgba(0,0,0,0.05);}
+  .clock-tick-mark{position:absolute;width:3px;height:10px;background:#ccc;left:50%;top:6px;transform-origin:bottom center;}
+  .clock-tick-major{width:4px;height:14px;background:#999;}
+  .clock-num{position:absolute;font-family:'Fredoka One',cursive;font-size:0.9em;color:var(--dark);}
+  .clock-hand{position:absolute;bottom:50%;left:50%;transform-origin:bottom center;border-radius:4px;}
+  .hour-hand{width:6px;height:65px;background:var(--dark);margin-left:-3px;}
+  .minute-hand{width:4px;height:82px;background:var(--ocean);margin-left:-2px;}
+  .second-hand{width:2px;height:88px;background:#FF4444;margin-left:-1px;}
+  .clock-center{position:absolute;width:14px;height:14px;background:var(--coral);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;}
+  #park-screen{padding:10px;}
+  .park-header{background:linear-gradient(135deg,#00B4DB,#0083B0);border-radius:20px;padding:20px;text-align:center;margin-bottom:14px;color:white;}
+  .park-header h2{font-family:'Fredoka One',cursive;font-size:2em;text-shadow:2px 2px 5px rgba(0,0,0,0.2);}
+  .park-areas{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px;}
+  .park-area{border-radius:18px;padding:18px;text-align:center;cursor:pointer;transition:all 0.2s;border:3px solid transparent;}
+  .park-area:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,0.15);}
+  .park-area.locked{opacity:0.5;cursor:not-allowed;}
+  .park-area .area-emoji{font-size:2.8em;margin-bottom:8px;}
+  .park-area h3{font-family:'Fredoka One',cursive;font-size:1.1em;margin-bottom:5px;}
+  .park-area p{font-size:0.8em;opacity:0.8;}
+  .area-water{background:linear-gradient(135deg,#E0F7FA,#B2EBF2);color:#006064;border-color:#00BCD4;}
+  .area-food{background:linear-gradient(135deg,#FFF8E1,#FFECB3);color:#E65100;border-color:#FFB300;}
+  .area-arcade{background:linear-gradient(135deg,#F3E5F5,#E1BEE7);color:#4A148C;border-color:#9C27B0;}
+  .food-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px;margin:14px 0;}
+  .food-item{background:white;border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;border:2px solid #FFF;box-shadow:0 3px 10px rgba(0,0,0,0.08);transition:all 0.2s;}
+  .food-item:hover{border-color:var(--sun);transform:translateY(-2px);}
+  .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;backdrop-filter:blur(4px);}
+  .modal-box{background:white;border-radius:24px;padding:28px;max-width:560px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);position:relative;}
+  .modal-title{font-family:'Fredoka One',cursive;font-size:1.6em;color:var(--water);margin-bottom:14px;}
+  .modal-close{position:absolute;top:14px;right:14px;background:#FF6B6B;color:white;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1.1em;display:flex;align-items:center;justify-content:center;font-weight:bold;}
+  .vocab-term{background:#F8F9FA;border-radius:12px;padding:12px 14px;margin-bottom:10px;border-left:4px solid var(--ocean);}
+  .vocab-term h4{font-size:1em;color:var(--water);margin-bottom:4px;}
+  .vocab-term p{font-size:0.9em;color:#555;line-height:1.5;}
+  .tip-content{font-size:1em;color:var(--dark);line-height:1.7;}
+  .tip-content h4{color:var(--water);margin:10px 0 5px;font-size:1em;}
+  .tip-example{background:#E8F5E9;border-radius:10px;padding:10px 12px;margin:8px 0;font-size:0.9em;}
+  #win-screen{text-align:center;padding:40px 20px;}
+  .stars-big{font-size:4em;animation:starSpin 1s infinite;margin:15px 0;}
+  @keyframes starSpin{0%,100%{transform:scale(1) rotate(-5deg)}50%{transform:scale(1.1) rotate(5deg)}}
+  .win-title{font-family:'Fredoka One',cursive;font-size:2.5em;color:var(--water);text-shadow:3px 3px 0 #FFD700;margin-bottom:15px;}
+  .win-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0;}
+  .win-stat{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border-radius:16px;padding:14px;text-align:center;}
+  .win-stat .num{font-family:'Fredoka One',cursive;font-size:2em;}
+  .win-stat .label{font-size:0.8em;opacity:0.85;}
+  #lose-screen{text-align:center;padding:40px 20px;}
+  #hotel-screen{padding:20px;text-align:center;}
+  .hotel-visual{background:linear-gradient(135deg,#f093fb,#f5576c);border-radius:20px;padding:30px;color:white;margin-bottom:20px;}
+  .hotel-visual h2{font-family:'Fredoka One',cursive;font-size:2em;margin-bottom:10px;}
+  .feedback-msg{text-align:center;padding:12px;border-radius:12px;font-weight:700;font-size:1em;margin-top:10px;display:none;}
+  .feedback-correct{background:#E8F5E9;color:#1B5E20;border:2px solid #66BB6A;}
+  .feedback-wrong{background:#FFEBEE;color:#B71C1C;border:2px solid #EF5350;}
+  .slide-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:14px 0;}
+  .slide-option{background:linear-gradient(135deg,#00B4DB,#0083B0);color:white;border-radius:16px;padding:18px 12px;text-align:center;cursor:pointer;border:3px solid transparent;transition:all 0.2s;font-family:'Fredoka One',cursive;font-size:1em;}
+  .slide-option:hover{transform:translateY(-3px);border-color:white;box-shadow:0 6px 18px rgba(0,0,0,0.2);}
+  .slide-option .slide-emoji{font-size:2.5em;margin-bottom:8px;}
+  .section-divider{height:2px;background:linear-gradient(90deg,transparent,var(--ocean),transparent);margin:18px 0;border-radius:2px;}
+  .small-note{font-size:0.82em;color:#888;text-align:center;margin-top:8px;}
+  .btn-sm{background:var(--ocean);color:white;border:none;border-radius:20px;padding:8px 20px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.9em;cursor:pointer;transition:all 0.2s;margin-top:8px;}
+  .btn-sm:hover{background:var(--water);transform:scale(1.03);}
+  .gas-station-img{font-size:4em;margin:10px;}
+  /* LAZY RIVER GAME */
+  #lazy-river-canvas{border-radius:16px;display:block;margin:0 auto;background:#87CEEB;max-width:100%;}
+  .river-ui{display:flex;justify-content:space-around;align-items:center;background:rgba(0,191,255,0.15);border-radius:12px;padding:10px;margin:10px 0;font-family:'Fredoka One',cursive;font-size:1.1em;color:var(--dark);}
+  .heart{color:#FF6B6B;font-size:1.4em;}
+  /* PARK Q COUNT */
+  .park-q-tracker{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border-radius:12px;padding:8px 16px;margin-bottom:10px;font-family:'Fredoka One',cursive;font-size:1em;text-align:center;}
+</style>
+</head>
+<body>
+<div id="game-container">
+  <div id="top-bar">
+    <div id="money-display">💰 $2,000.00</div>
+    <div id="top-buttons">
+      <button class="top-btn" onclick="showTips()">💡 Tips</button>
+      <button class="top-btn" onclick="showVocab()">📚 Vocabulary</button>
+      <button class="top-btn" onclick="showBookbag()" id="bookbag-btn">🎒 My Bag (0)</button>
+      <button class="top-btn" id="pause-btn" onclick="togglePause()" style="background:rgba(255,200,50,0.35);border-color:rgba(255,230,100,0.8);">⏸️ Pause</button>
+      <button class="top-btn" onclick="confirmExit()" style="background:rgba(220,50,50,0.5);border-color:rgba(255,150,150,0.9);font-weight:800;letter-spacing:0.5px;position:relative;z-index:400;">🚪 Exit</button>
+    </div>
+    <div id="stars-display">⭐⭐⭐⭐⭐</div>
+    <div id="time-display">🕐 7:00 AM</div>
+    <div id="miss-display">❌ Misses: 0/4</div>
+  </div>
+
+  <!-- PAUSE OVERLAY -->
+  <div id="pause-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,80,0.85);z-index:200;align-items:center;justify-content:center;flex-direction:column;">
+    <div style="background:white;border-radius:24px;padding:40px;text-align:center;max-width:360px;">
+      <div style="font-size:4em;">⏸️</div>
+      <h2 style="font-family:'Fredoka One',cursive;font-size:2em;color:var(--water);margin:12px 0;">Game Paused</h2>
+      <p style="color:#555;margin-bottom:20px;">Take a break! The clock is stopped. Come back when you're ready!</p>
+      <button class="big-btn" onclick="togglePause()">▶️ Resume Game</button>
+    </div>
+  </div>
+
+  <!-- EXIT CONFIRM MODAL -->
+  <div id="exit-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(80,0,0,0.88);z-index:300;align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:24px;padding:36px 28px;text-align:center;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+      <div style="font-size:3.5em;margin-bottom:8px;">🚪</div>
+      <h2 style="font-family:'Fredoka One',cursive;font-size:1.8em;color:#C62828;margin-bottom:12px;">Exit the Game?</h2>
+      <p style="color:#555;font-size:1em;margin-bottom:8px;">Are you going to <strong>recess</strong> or <strong>lunch</strong>? 🍽️</p>
+      <p style="color:#777;font-size:0.9em;margin-bottom:22px;">If you exit now, your progress will be lost and the game will restart from the beginning.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button onclick="doExit()" style="background:linear-gradient(135deg,#C62828,#E53935);color:white;font-family:'Fredoka One',cursive;font-size:1.1em;padding:12px 26px;border:none;border-radius:40px;cursor:pointer;box-shadow:0 4px 12px rgba(198,40,40,0.4);">
+          ✅ Yes, Exit Now
+        </button>
+        <button onclick="cancelExit()" style="background:linear-gradient(135deg,#1E88E5,#1565C0);color:white;font-family:'Fredoka One',cursive;font-size:1.1em;padding:12px 26px;border:none;border-radius:40px;cursor:pointer;box-shadow:0 4px 12px rgba(21,101,192,0.4);">
+          ↩️ Keep Playing!
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKBAG MODAL -->
+  <div id="bookbag-overlay" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,80,0.8);z-index:300;align-items:center;justify-content:center;" onclick="closeBookbag(event)">
+    <div style="background:white;border-radius:24px;padding:28px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.4);position:relative;">
+      <button onclick="document.getElementById('bookbag-overlay').style.display='none'" style="position:absolute;top:12px;right:12px;background:#FF6B6B;color:white;border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:1.1em;font-weight:bold;">✕</button>
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:3em;">🎒</div>
+        <h2 style="font-family:'Fredoka One',cursive;color:#1E4D78;font-size:1.6em;">My Bookbag</h2>
+        <p style="color:#666;font-size:0.9em;">Items you've earned from the Arcade Gift Shop!</p>
+      </div>
+      <div id="bookbag-contents"></div>
+    </div>
+  </div>
+  <div id="welcome-screen" class="screen active">
+    <div class="wave-emoji">🌊</div>
+    <h1>Summer Splash<br>Adventure!</h1>
+    <p style="font-family:'Nunito',sans-serif;font-size:0.85em;color:#1565C0;margin-bottom:16px;font-style:italic;opacity:0.85;">Created by Kortisha Yo&#39;Londa Baker</p>
+    <div class="intro-box">
+      <p>🌟 <strong>Welcome, Math Explorer!</strong> You're going on the BEST summer trip to Waterfall Park!</p>
+
+      <p>💰 You start with <strong>$2,000</strong>. You <strong>must buy at least one item</strong> before leaving — a little or a lot, just don't go over your budget!</p>
+
+      <p>⏰ <strong>Beat the Clock!</strong> Make it to Dream Hotel before <strong>11:00 AM</strong>. The clock starts the moment you fill up the car — don't waste time! The park closes at <strong>8:00 PM</strong>.</p>
+
+      <p>🧮 <strong>At Waterfall Park, you must answer a total of 160 questions to win!</strong> Here is how they add up:</p>
+      <div style="background:#E3F2FD;border-radius:12px;padding:12px 16px;margin:8px 0;font-size:0.98em;line-height:2;">
+        🌊 <strong>Water Activities</strong> — each ride = 1 question (do at least 3 mandatory rides)<br>
+        🏊 <strong>Array of Fun in the Pool</strong> — 10 array questions<br>
+        🚗 <strong>Bumper Cars</strong> — 1 question per ride<br>
+        🎢 <strong>Roller Coaster</strong> — 1 question per ride<br>
+        🕹️ <strong>Arcade</strong> — play 2 games × 10 questions each = <strong>20 questions</strong><br>
+        🍽️ <strong>Food Court</strong> — order 3 food items × 20 questions each = <strong>60 questions</strong>
+      </div>
+
+      <p>⭐ <strong>To earn 5 Stars and WIN:</strong></p>
+      <div style="background:#E8F5E9;border-radius:12px;padding:12px 16px;margin:8px 0;font-size:0.95em;line-height:1.9;">
+        ✅ Complete at least <strong>3 mandatory water activities</strong><br>
+        ✅ Play <strong>2 arcade games</strong> (10 questions each)<br>
+        ✅ Order <strong>3 food items</strong> (20 questions each)<br>
+        ✅ Answer <strong>160 total questions</strong> before 8:00 PM<br>
+        ✅ Miss no more than <strong>4 questions</strong> on the road
+      </div>
+
+      <p>💡 Use the <strong>Tips</strong> and <strong>Vocabulary</strong> buttons at the top anytime you need help!</p>
+    </div>
+    <button class="big-btn" onclick="startGame()">🚀 Let's Go!</button>
+  </div>
+
+  <!-- STORE -->
+  <div id="store-screen" class="screen">
+    <h2 class="screen-title">🛒 Shopping Time! Get Ready for the Trip!</h2>
+    <div style="background:#FFF3E0;border-radius:14px;padding:12px 18px;margin-bottom:10px;border-left:5px solid #FF9800;font-size:1em;font-weight:700;color:#E65100;">
+      📌 You <strong>MUST</strong> buy at least one item before you can leave! It doesn't matter if it's a little or a lot — just don't go over your $2,000 budget!
+    </div>
+    <div id="store-content"></div>
+    <div class="cart-summary">
+      <div>
+        <div class="cart-total">🛒 Cart: $<span id="cart-total">0.00</span></div>
+        <div class="cart-remaining">Remaining: $<span id="money-remaining">2000.00</span></div>
+      </div>
+      <button class="big-btn" onclick="checkoutStore()">Checkout & Head Home! 🏠</button>
+    </div>
+  </div>
+
+  <!-- CLOCK -->
+  <div id="clock-screen" class="screen">
+    <h2 class="screen-title">&#9201; Set Your Alarm to 6:00!</h2>
+    <div class="intro-box" id="clock-instructions">
+      <p>&#128072; <strong>Click and drag</strong> each hand to move it to the right spot, then press <strong>Set My Alarm!</strong></p>
+      <p>You have <strong><span id="clock-tries-left">3</span> tries</strong> left!</p>
+    </div>
+    <canvas id="clock-canvas" width="280" height="280" style="display:block;margin:0 auto;cursor:grab;border-radius:50%;box-shadow:0 8px 30px rgba(0,0,0,0.15);touch-action:none;"></canvas>
+    <p id="clock-time-label" style="text-align:center;font-family:'Fredoka One',cursive;font-size:1.5em;color:var(--water);margin:10px 0;">Time shown: <span id="clock-time-text">12:00</span></p>
+    <div id="clock-feedback" style="text-align:center;margin-top:6px;font-family:'Fredoka One',cursive;font-size:1.1em;min-height:32px;"></div>
+    <div style="text-align:center;margin-top:10px;">
+      <button class="big-btn" onclick="checkClockTime()">Set My Alarm! &#9201;</button>
+    </div>
+  </div>
+
+  <!-- GAS -->
+  <div id="gas-screen" class="screen">
+    <h2 class="screen-title">⛽ Fill Up the Tank!</h2>
+    <div class="intro-box">
+      <p>Your Tahoe needs gas before the road trip!</p>
+      <p>💵 A full tank costs <strong>$70.00</strong>.</p>
+      <p>You have $<span id="gas-money-display">0</span> left.</p>
+    </div>
+    <div style="text-align:center;margin:20px;">
+      <div class="gas-station-img">⛽🚙</div>
+      <button class="big-btn" onclick="fillGas()">Pay $70 for Gas! 🛞</button>
+    </div>
+  </div>
+
+  <!-- ROAD -->
+  <div id="road-screen" class="screen">
+    <h2 class="screen-title">🚗 Road Trip to the Hotel!</h2>
+    <div class="road-visual">
+      <div class="car-emoji">🚙</div>
+      <div style="color:white;font-family:'Fredoka One',cursive;font-size:1.1em;margin:5px;">On the road to <strong>Dream Hotel!</strong></div>
+      <div class="progress-road"><div class="progress-fill" id="road-progress" style="width:5%"></div></div>
+      <div class="road-info"><span>🏠 Home</span><span id="road-percent">5%</span><span>🏨 Hotel</span></div>
+    </div>
+    <div id="road-question-area"></div>
+  </div>
+
+  <!-- HOTEL -->
+  <div id="hotel-screen" class="screen">
+    <div class="hotel-visual">
+      <div style="font-size:3em;">🏨</div>
+      <h2>Welcome to Dream Hotel!</h2>
+      <p>You made it! Check-in at <span id="arrival-time-display">10:45 AM</span> ✅</p>
+    </div>
+    <div class="intro-box">
+      <p>🎉 <strong>Amazing!</strong> You made it before 11:00 AM! The clock is paused while you check in.</p>
+      <p>💰 You have $<span id="hotel-money">0</span> to spend at the park!</p>
+      <p>⏰ <strong>The clock restarts</strong> the moment you head to Waterfall Park. The park closes at <strong>8:00 PM</strong>!</p>
+      <p>⚠️ You must answer <strong>20 questions</strong> AND complete ALL activities before 8:00 PM to WIN!</p>
+      <p>🍦 Food is your reward — unlocked AFTER answering all 20 questions!</p>
+    </div>
+    <div style="text-align:center;">
+      <button class="big-btn" onclick="goToPark()">🌊 Head to Waterfall Park!</button>
+    </div>
+  </div>
+
+  <!-- PARK -->
+  <div id="park-screen" class="screen">
+    <div class="park-header">
+      <div style="font-size:2.5em;">🌊🎢🏖️</div>
+      <h2>Waterfall Park!</h2>
+      <p style="opacity:0.85;margin-top:5px;">⏰ Park closes at <strong>8:00 PM</strong> • 💰 $<span id="park-money-display">0</span></p>
+    </div>
+    <div class="park-q-tracker" id="park-q-tracker">📋 Park Questions: 0 / 20 answered</div>
+    <div id="park-areas-grid" class="park-areas"></div>
+    <div id="park-activity-area"></div>
+  </div>
+
+  <!-- WIN -->
+  <div id="win-screen" class="screen">
+    <div class="stars-big">⭐⭐⭐⭐⭐</div>
+    <h2 class="win-title">🎉 You Won!</h2>
+    <p style="font-size:1.1em;color:#555;margin-bottom:20px;">Amazing job, Math Star! What a perfect summer day at Waterfall Park!</p>
+    <div class="win-stats">
+      <div class="win-stat"><div class="num" id="win-stars">⭐⭐⭐⭐⭐</div><div class="label">Stars Earned</div></div>
+      <div class="win-stat"><div class="num" id="win-correct">0</div><div class="label">Correct Answers</div></div>
+      <div class="win-stat"><div class="num" id="win-money">$0</div><div class="label">Money Left</div></div>
+      <div class="win-stat"><div class="num" id="win-tickets">0</div><div class="label">Tickets Earned</div></div>
+    </div>
+    <div class="intro-box">
+      <p>🧮 <strong>Arrays</strong> help us count in equal rows and columns!</p>
+      <p>💰 <strong>Money</strong> helps us plan, buy, and save smartly!</p>
+      <p>🎟️ You earned arcade tickets by playing games — great job!</p>
+      <p>You're a math superstar! 🌟</p>
+    </div>
+    <button class="big-btn" onclick="restartGame()">🔄 Play Again!</button>
+  </div>
+
+  <!-- LOSE -->
+  <div id="lose-screen" class="screen">
+    <div style="font-size:4em;margin:20px;">😢</div>
+    <h2 style="font-family:'Fredoka One',cursive;font-size:2em;color:#FF6B6B;margin-bottom:15px;">Oh No! Try Again!</h2>
+    <div class="intro-box">
+      <p id="lose-reason">You missed too many questions!</p>
+      <p>Don't give up! Read the tips and try again. You've got this! 💪</p>
+    </div>
+    <button class="big-btn" onclick="restartGame()">🔄 Try Again!</button>
+  </div>
+</div>
+
+<!-- TIP MODAL -->
+<div id="tip-modal" class="modal-overlay" style="display:none;" onclick="closeTipModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('tip-modal').style.display='none'">✕</button>
+    <div class="modal-title">💡 Math Tips!</div>
+    <div class="tip-content">
+      <h4>🧮 What is an Array?</h4>
+      <p>An array is objects arranged in <strong>rows</strong> (across ↔) and <strong>columns</strong> (up and down ↕)!</p>
+      <div class="tip-example">
+        <strong>Example: 3 rows × 4 columns</strong><br>
+        🔴🔴🔴🔴 ← row 1<br>
+        🔴🔴🔴🔴 ← row 2<br>
+        🔴🔴🔴🔴 ← row 3<br>
+        <em>Point to each dot and count them all yourself!</em>
+      </div>
+      <p>💡 Try <strong>skip counting</strong> by the number in each row!</p>
+      <div class="tip-example">If each row has 4 dots, skip count by 4. Say one number for each row — stop when you've counted every row. The last number you say is your answer!</div>
+      <div class="section-divider"></div>
+      <h4>💰 Coin Values!</h4>
+      <div class="tip-example">
+        🟤 <strong>Penny</strong> = 1¢ ($0.01)<br>
+        ⚪ <strong>Nickel</strong> = 5¢ ($0.05)<br>
+        ⚫ <strong>Dime</strong> = 10¢ ($0.10)<br>
+        🔘 <strong>Quarter</strong> = 25¢ ($0.25)<br>
+        💵 <strong>Dollar</strong> = 100¢ ($1.00)
+      </div>
+      <p>Start with the <strong>biggest coin</strong> first when counting!</p>
+      <div class="tip-example"><strong>Example:</strong> Quarter + Dime = ?<br>A quarter is 25¢. A dime is 10¢. Start at 25 and count up 10 more. What number do you reach?</div>
+      <div class="section-divider"></div>
+      <h4>🛒 Smart Shopping!</h4>
+      <p>Think: Do I <strong>need</strong> this or just <strong>want</strong> it?</p>
+      <p>A higher price doesn't always mean better! Compare before you buy!</p>
+      <p>Always check you have <strong>enough money</strong> first!</p>
+    </div>
+  </div>
+</div>
+
+<!-- VOCAB MODAL -->
+<div id="vocab-modal" class="modal-overlay" style="display:none;" onclick="closeVocabModal(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('vocab-modal').style.display='none'">✕</button>
+    <div class="modal-title">📚 Math Vocabulary</div>
+    <div class="vocab-term"><h4>Array</h4><p>Objects arranged in equal rows and columns. Arrays help us multiply!</p></div>
+    <div class="vocab-term"><h4>Row</h4><p>A line going across (left to right ↔). Like seats in a row at the movies!</p></div>
+    <div class="vocab-term"><h4>Column</h4><p>A line going up and down (↕). Like pillars holding up a building!</p></div>
+    <div class="vocab-term"><h4>Multiplication</h4><p>Adding equal groups together. 3 × 4 means "3 groups of 4." Arrays show this!</p></div>
+    <div class="vocab-term"><h4>Factor</h4><p>Numbers you multiply together. In 3 × 4 = 12, the factors are 3 and 4.</p></div>
+    <div class="vocab-term"><h4>Product</h4><p>The answer when you multiply. In 3 × 4 = 12, the product is 12.</p></div>
+    <div class="vocab-term"><h4>Skip Counting</h4><p>Counting by a number other than 1. Like: 5, 10, 15, 20 (skip counting by 5)!</p></div>
+    <div class="vocab-term"><h4>Penny</h4><p>Worth 1 cent. It takes 100 pennies to make $1.00!</p></div>
+    <div class="vocab-term"><h4>Nickel</h4><p>Worth 5 cents. Equals 5 pennies!</p></div>
+    <div class="vocab-term"><h4>Dime</h4><p>Worth 10 cents. Even though it's the smallest coin, it's worth more than a nickel!</p></div>
+    <div class="vocab-term"><h4>Quarter</h4><p>Worth 25 cents. Four quarters make $1.00!</p></div>
+    <div class="vocab-term"><h4>Dollar</h4><p>Worth 100 cents. You can pay with a dollar bill!</p></div>
+    <div class="vocab-term"><h4>Total</h4><p>The full amount when you add everything together.</p></div>
+    <div class="vocab-term"><h4>Change</h4><p>The money you get BACK when you pay more than something costs.</p></div>
+  </div>
+</div>
+
+<script>
+// ===== GAME STATE =====
+const G = {
+  money:2000, cartTotal:0, cartItems:{}, misses:0, maxMisses:4,
+  correctAnswers:0, wrongAttemptsOnQuestion:0, roadQuestions:[], currentRoadQ:0,
+  gameTime:7*3600, alarmHour:6, stars:5,
+  parkQAnswered:0, parkQRequired:160,
+  lifeLineBonus:0, clockInterval:null, clockSeconds:0, parkGameOver:false,
+  completedActivities:[], mandatoryCompleted:[],
+  tickets:0, arcadeGamesCompleted:0, arcadeCompleted:[], _arcadeSession:null,
+  foodItemsOrdered:0, foodMisses:0, foodMissesThisItem:0, currentFoodItem:null, foodQAnswered:0,
+  bookbag:[]
+};
+
+// ===== SOUNDS =====
+function playSound(type){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    if(type==='correct'){
+      [523,659,784,1047].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(0.3,ctx.currentTime+i*0.12);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.12+0.3);o.start(ctx.currentTime+i*0.12);o.stop(ctx.currentTime+i*0.12+0.3);});
+    }else if(type==='wrong'){
+      [220,180].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=f;o.type='sawtooth';g.gain.setValueAtTime(0.3,ctx.currentTime+i*0.2);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.2+0.3);o.start(ctx.currentTime+i*0.2);o.stop(ctx.currentTime+i*0.2+0.3);});
+    }else if(type==='win'){
+      [523,587,659,698,784,880,988,1047].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=f;o.type='sine';g.gain.setValueAtTime(0.25,ctx.currentTime+i*0.1);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.1+0.4);o.start(ctx.currentTime+i*0.1);o.stop(ctx.currentTime+i*0.1+0.4);});
+    }else if(type==='gas'){
+      [150,120,100].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.value=f;o.type='sawtooth';g.gain.setValueAtTime(0.4,ctx.currentTime+i*0.15);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+i*0.15+0.4);o.start(ctx.currentTime+i*0.15);o.stop(ctx.currentTime+i*0.15+0.4);});
+    }else if(type==='splash'){
+      const o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.setValueAtTime(400,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(100,ctx.currentTime+0.5);o.type='sine';g.gain.setValueAtTime(0.4,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.5);o.start(ctx.currentTime);o.stop(ctx.currentTime+0.5);
+    }
+  }catch(e){}
+}
+
+// ===== STORE DATA =====
+const storeData = {
+  hygiene:{title:'🧴 Hygiene & Health',items:[
+    {name:'Toothbrush',brand:'SparklePro',price:4.99,emoji:'🪥'},
+    {name:'Toothbrush',brand:'BudgetBrush',price:1.49,emoji:'🪥'},
+    {name:'Toothbrush',brand:'UltraClean',price:8.99,emoji:'🪥'},
+    {name:'Toothpaste',brand:'FreshMint Co.',price:5.29,emoji:'🦷'},
+    {name:'Toothpaste',brand:'ValueFresh',price:2.19,emoji:'🦷'},
+    {name:'Toothpaste',brand:'PearlWhite',price:9.49,emoji:'🦷'},
+    {name:'Mouthwash',brand:'BreezeFresh',price:6.49,emoji:'🫧'},
+    {name:'Mouthwash',brand:'BudgetRinse',price:3.19,emoji:'🫧'},
+    {name:'Shampoo',brand:'SilkyWave',price:7.99,emoji:'🧴'},
+    {name:'Shampoo',brand:'CleanAir',price:3.49,emoji:'🧴'},
+    {name:'Shampoo',brand:'LuxuryLocks',price:14.99,emoji:'🧴'},
+    {name:'Hair Brush',brand:'SmoothGlide',price:6.99,emoji:'💇'},
+    {name:'Hair Brush',brand:'QuickStyle',price:2.79,emoji:'💇'},
+    {name:'Lotion',brand:'SunKiss',price:8.49,emoji:'🧴'},
+    {name:'Lotion',brand:'ValueSoft',price:3.29,emoji:'🧴'},
+    {name:'Medicine',brand:'WellCare',price:12.99,emoji:'💊'},
+    {name:'First Aid Kit',brand:'SafeTravels',price:19.99,emoji:'🩹'},
+    {name:'First Aid Kit',brand:'BasicCare',price:8.99,emoji:'🩹'},
+  ]},
+  clothes:{title:'👙 Summer Clothes',items:[
+    {name:'Girls Swimsuit',brand:'SplashWear',price:24.99,emoji:'👙'},
+    {name:'Girls Swimsuit',brand:'BudgetSwim',price:12.99,emoji:'👙'},
+    {name:'Boys Swim Trunks',brand:'WaveRider',price:19.99,emoji:'🩲'},
+    {name:'Boys Swim Trunks',brand:'SplashKid',price:10.99,emoji:'🩲'},
+    {name:'Boys Swim Trunks',brand:'BudgetBoard',price:7.99,emoji:'🩲'},
+    {name:'Boys Rash Guard',brand:'SunShield Kids',price:22.99,emoji:'👕'},
+    {name:'Boys Rash Guard',brand:'QuickDry Jr.',price:14.99,emoji:'👕'},
+    {name:'Sun Hat',brand:'CoolShade',price:15.99,emoji:'🧢'},
+    {name:'Sun Hat',brand:'BasicBrim',price:7.49,emoji:'🧢'},
+    {name:'Flip Flops',brand:'BeachStride',price:18.99,emoji:'🩴'},
+    {name:'Flip Flops',brand:'ValueFlips',price:5.99,emoji:'🩴'},
+    {name:'Sunglasses',brand:'VistaCool',price:21.99,emoji:'🕶️'},
+    {name:'Sunglasses',brand:'SunShield',price:9.99,emoji:'🕶️'},
+    {name:'Beach Towel',brand:'SoftWave',price:16.99,emoji:'🏖️'},
+    {name:'Beach Towel',brand:'QuickDry Pro',price:28.99,emoji:'🏖️'},
+  ]},
+  snacks:{title:'🍎 Healthy Snacks & Fruit',items:[
+    {name:'Bananas',brand:'FreshPick (bunch)',price:1.49,emoji:'🍌'},
+    {name:'Apples',brand:'FarmFresh (6pk)',price:3.99,emoji:'🍎'},
+    {name:'Grapes',brand:'SunSweet (bag)',price:4.29,emoji:'🍇'},
+    {name:'Baby Carrots',brand:'GardenCrisp (bag)',price:2.49,emoji:'🥕'},
+    {name:'String Cheese',brand:'StringMate (6pk)',price:4.99,emoji:'🧀'},
+    {name:'Fruit Snacks',brand:'FruitPop (10pk)',price:3.99,emoji:'🍬'},
+    {name:'Fruit Snacks',brand:'NaturaBite',price:5.49,emoji:'🍬'},
+    {name:'Gummies',brand:'WildBear',price:2.99,emoji:'🐻'},
+    {name:'Granola Bars',brand:'PowerPack (6pk)',price:6.99,emoji:'🍫'},
+    {name:'Granola Bars',brand:'BudgetBar (6pk)',price:3.49,emoji:'🍫'},
+    {name:'Trail Mix',brand:'NutriTrail',price:5.79,emoji:'🥜'},
+  ]},
+  drinks:{title:'🥤 Drinks & Breakfast',items:[
+    {name:'Water Bottles',brand:'ClearFlow (6pk)',price:5.99,emoji:'💧'},
+    {name:'Juice Boxes',brand:'FreshSip (8pk)',price:4.99,emoji:'🧃'},
+    {name:'Juice Boxes',brand:'BudgetDrink (8pk)',price:2.49,emoji:'🧃'},
+    {name:'Breakfast Drinks',brand:'MorningBoost (4pk)',price:6.49,emoji:'🥛'},
+    {name:'Overnight Oats',brand:'EasyMorn (2pk)',price:5.29,emoji:'🥣'},
+    {name:'Cereal + Milk',brand:'MiniMorning Kit',price:4.79,emoji:'🥛'},
+    {name:'Yogurt',brand:'CreamyGood (4pk)',price:5.99,emoji:'🍦'},
+    {name:'Yogurt',brand:'BudgetYo (4pk)',price:3.49,emoji:'🍦'},
+  ]},
+  meals:{title:'🥪 Meals & Quick Foods',items:[
+    {name:'Pre-Made Sandwich',brand:'FreshDeli (2pk)',price:8.99,emoji:'🥪'},
+    {name:'Sub Sandwich',brand:'SubStop (2pk)',price:10.49,emoji:'🥖'},
+    {name:'Wraps',brand:'WrapKing (3pk)',price:9.29,emoji:'🌯'},
+    {name:'Lunch Kits',brand:'PackedUp (3pk)',price:11.99,emoji:'🍱'},
+    {name:'Instant Meals',brand:'QuickHeat (4pk)',price:7.99,emoji:'🍜'},
+    {name:'Instant Meals',brand:'BudgetCup (4pk)',price:4.49,emoji:'🍜'},
+    {name:'Muffins',brand:'BakeShop (4pk)',price:5.99,emoji:'🧁'},
+    {name:'Pastries',brand:'CroisStore (2pk)',price:4.49,emoji:'🥐'},
+    {name:'Breakfast Bars',brand:'MornBar (6pk)',price:5.79,emoji:'🍫'},
+    {name:'Breakfast Bars',brand:'BudgetBite (6pk)',price:3.29,emoji:'🍫'},
+  ]},
+  treats:{title:'🍿 Treats & Snack Foods',items:[
+    {name:'Popcorn',brand:'PopKing (4pk)',price:4.49,emoji:'🍿'},
+    {name:'Cheese Puffs',brand:'CheezeCloud',price:3.99,emoji:'🧀'},
+    {name:'Chips',brand:'CrunchTime (family)',price:4.99,emoji:'🥔'},
+    {name:'Chips',brand:'BudgetCrunch',price:2.49,emoji:'🥔'},
+    {name:'Cookies',brand:'ChocolateChip Co.',price:4.99,emoji:'🍪'},
+    {name:'Cookies',brand:'ClassicCrunch',price:3.49,emoji:'🍪'},
+    {name:'Candy',brand:'SweetStash (bag)',price:3.99,emoji:'🍬'},
+    {name:'Chocolate',brand:'MeltMaster (4pk)',price:5.49,emoji:'🍫'},
+    {name:'Crackers',brand:'CrunchMaster',price:4.49,emoji:'🍘'},
+    {name:'Crackers',brand:'SimpleCrunch',price:2.19,emoji:'🍘'},
+  ]}
+};
+
+// ===== QUESTIONS =====
+const arrayQs = [
+  {type:'array',rows:3,cols:4,answer:12,question:"There are 3 rows and 4 seats in each row. How many seats are there in ALL?",tip:"🧮 Look at the dots carefully. Try pointing to each one as you count out loud. You can also try skip counting — start at 4 and count up by 4 for each row. How many rows are there?",choices:[10,12,14,16]},
+  {type:'array',rows:2,cols:5,answer:10,question:"A box has 2 rows of cookies with 5 cookies in each row. How many cookies total?",tip:"🍪 Count every dot row by row. Or try skip counting by 5 — say a number once for each row you see. How many rows are there in the picture?",choices:[7,10,12,15]},
+  {type:'array',rows:4,cols:3,answer:12,question:"A garden has 4 rows of flowers with 3 flowers in each row. How many flowers total?",tip:"🌸 Point to each dot and count slowly. Or skip count by 3 — say one number for each row. How many rows do you see in the array?",choices:[9,11,12,14]},
+  {type:'array',rows:5,cols:2,answer:10,question:"5 children sit in 2 columns. How many children are there altogether?",tip:"👦 Count every dot in the array. Or try skip counting by 2 — say a number once for each row. How many rows are in this array?",choices:[7,8,10,12]},
+  {type:'array',rows:3,cols:6,answer:18,question:"Eggs are packed in 3 rows with 6 eggs in each row. How many eggs total?",tip:"🥚 Count every dot carefully, row by row. Or skip count by 6 — say one number for each row you see. Don't forget to count ALL the rows!",choices:[15,16,18,21]},
+  {type:'array',rows:2,cols:8,answer:16,question:"There are 2 rows of oranges with 8 in each row. How many oranges?",tip:"🍊 Point to each dot and count out loud. Or skip count by 8 — say one number for each row. How many rows are there?",choices:[12,14,16,18]},
+  {type:'array',rows:6,cols:3,answer:18,question:"A parking lot has 6 rows with 3 cars in each row. How many cars?",tip:"🚗 Count every single dot. Or skip count by 3 — say a number once for each row. There are 6 rows, so you will say 6 numbers when you skip count!",choices:[15,17,18,21]},
+  {type:'array',rows:4,cols:5,answer:20,question:"There are 4 rows of stars with 5 stars in each row. How many stars?",tip:"⭐ Touch each dot and count. Or try skip counting by 5 — say one number per row. How many rows do you count in the array?",choices:[16,18,20,24]},
+  {type:'array',rows:3,cols:7,answer:21,question:"A strawberry patch has 3 rows with 7 strawberries per row. How many strawberries?",tip:"🍓 Count every dot carefully. Or skip count by 7 — say one number for each row. Make sure you count a number for every row you see!",choices:[18,20,21,24]},
+  {type:'array',rows:5,cols:4,answer:20,question:"Books are stacked in 5 rows with 4 books per row. How many books?",tip:"📚 Touch each dot and count. Or skip count by 4 — say one number for each row. You will say a number 5 times, once for each row!",choices:[16,18,20,22]},
+  {type:'array',rows:2,cols:9,answer:18,question:"There are 2 rows of buttons with 9 buttons each. How many buttons total?",tip:"🔘 Count all the dots row by row. Or skip count by 9 — say a number once for each row. How many rows does this array have?",choices:[14,16,18,20]},
+  {type:'array',rows:7,cols:2,answer:14,question:"7 rows of lily pads with 2 lily pads each. How many lily pads?",tip:"🍃 Count every dot in the array. Or skip count by 2 — say one number for each row. There are 7 rows, so how many times will you skip count?",choices:[12,13,14,16]},
+  {type:'array',rows:4,cols:4,answer:16,question:"A square array has 4 rows and 4 columns. How many dots are there?",tip:"🔲 This is a square array — same number of rows and columns! Count all the dots, or skip count by 4. How many rows do you see?",choices:[12,14,16,20]},
+  {type:'array',rows:3,cols:5,answer:15,question:"There are 3 rows of crayons with 5 crayons in each row. How many crayons?",tip:"🖍️ Point to each dot and count one by one. Or try skip counting by 5. Say a number for each row — how many rows are there?",choices:[12,13,15,18]},
+  {type:'array',rows:6,cols:2,answer:12,question:"6 rows of shoes with 2 shoes in each row. How many shoes?",tip:"👟 Count every dot in the picture. Or skip count by 2. Say one number for each row. How many rows are there in all?",choices:[10,11,12,14]},
+  {type:'array',rows:5,cols:3,answer:15,question:"A tray has 5 rows with 3 muffins in each row. How many muffins?",tip:"🧁 Count every dot carefully. Or skip count by 3 — say one number per row. How many rows does this array have?",choices:[12,14,15,18]},
+  {type:'array',rows:2,cols:6,answer:12,question:"A carton has 2 rows of 6 eggs each. How many eggs?",tip:"🥚 Look at the dots and count them all. Or skip count by 6 — say a number once for each row. How many rows are there?",choices:[8,10,12,14]},
+  {type:'array',rows:4,cols:2,answer:8,question:"4 rows of candles with 2 candles in each row. How many candles?",tip:"🕯️ Count every dot. Or skip count by 2 — say a number once for each row. How many rows does this array have?",choices:[6,7,8,10]},
+];
+
+const moneyQs = [
+  // ── BASIC COIN VALUES ──────────────────────────────────────────────────────
+  {type:'money',answer:'Quarter',question:"Which coin is worth exactly 25 cents all by itself?",tip:"🔘 Remember your coins: penny=1¢, nickel=5¢, dime=10¢, quarter=25¢. Which one equals exactly 25 cents?",display:"1¢  5¢  10¢  25¢",choices:['Penny','Nickel','Dime','Quarter']},
+  {type:'money',answer:'Dime',question:"Which is the SMALLEST coin but worth MORE than a nickel?",tip:"⚫ A nickel is worth 5¢. Think about which coin is physically small but worth more. Which coin equals 10¢?",display:"Penny? Nickel? Dime? Quarter?",choices:['Penny','Nickel','Dime','Quarter']},
+  {type:'money',answer:'5',question:"A nickel is worth how many pennies?",tip:"⚪ A nickel = 5¢. A penny = 1¢. How many pennies do you need to equal 5¢? Count by 1s until you reach 5.",display:"⚪ = ? 🟤🟤🟤🟤🟤",choices:['1','2','5','10']},
+  {type:'money',answer:'2',question:"How many nickels equal 1 dime (10 cents)?",tip:"⚪ Each nickel is worth 5¢. A dime is worth 10¢. How many 5s do you need to reach 10? Think: 5 + 5 = ?",display:"⚪⚪ = ⚫?",choices:['1','2','3','5']},
+  {type:'money',answer:'10',question:"A dime is worth how many pennies?",tip:"⚫ A dime = 10¢. Each penny = 1¢. How many pennies make 10¢? Count by 1s up to 10.",display:"⚫ = ? 🟤🟤🟤🟤🟤🟤🟤🟤🟤🟤",choices:['5','8','10','25']},
+
+  // ── ADDING COINS ───────────────────────────────────────────────────────────
+  {type:'money',answer:'30',question:"You have 1 quarter and 1 nickel. How many cents total?",tip:"🔘 A quarter is worth 25¢. A nickel is worth 5¢. Start at 25 and count up 5 more. What number do you land on?",display:"🔘+⚪",choices:['25','28','30','35']},
+  {type:'money',answer:'15',question:"You have 1 dime and 1 nickel. How many cents total?",tip:"⚫ A dime is 10¢. A nickel is 5¢. Start at 10 and count up 5 more. What is the total?",display:"⚫+⚪",choices:['12','14','15','20']},
+  {type:'money',answer:'41',question:"You have 1 quarter, 1 dime, 1 nickel, and 1 penny. How many CENTS total?",tip:"💰 Start with the biggest coin — a quarter is 25¢. Add the dime (10¢), then nickel (5¢), then penny (1¢). Add one at a time!",display:"🔘+⚫+⚪+🟤",choices:['36','39','41','45']},
+  {type:'money',answer:'35',question:"You have 1 quarter and 2 nickels. How many cents total?",tip:"💰 A quarter is 25¢. Each nickel is 5¢. Start at 25 and add 5, then add 5 again. Where do you land?",display:"🔘+⚪+⚪",choices:['30','33','35','40']},
+  {type:'money',answer:'46',question:"You have 1 quarter, 2 dimes, and 1 penny. How many cents total?",tip:"💰 Quarter=25¢. Add each dime one at a time (each adds 10¢). Then add the penny (1¢). Keep a running total!",display:"🔘+⚫+⚫+🟤",choices:['44','45','46','50']},
+  {type:'money',answer:'51',question:"You have 2 quarters and 1 penny. How many cents total?",tip:"🔘 Each quarter is 25¢. Add both quarters first, then add the penny. How much do 2 quarters make before you add the penny?",display:"🔘🔘+🟤",choices:['48','50','51','55']},
+  {type:'money',answer:'85',question:"You have 3 quarters and 1 dime. How many cents total?",tip:"💡 Each quarter is 25¢. Skip count by 25 for each quarter. Then add 10¢ for the dime. What is your total?",display:"🔘🔘🔘+⚫",choices:['80','82','85','90']},
+  {type:'money',answer:'60',question:"You have 6 dimes. How many cents is that?",tip:"⚫ Each dime is worth 10¢. Skip count by 10 once for each dime. How many dimes do you have?",display:"⚫⚫⚫⚫⚫⚫",choices:['50','55','60','66']},
+  {type:'money',answer:'20',question:"You have 2 dimes. How many cents is that?",tip:"⚫ Each dime is 10¢. Skip count by 10 — say one number for each dime. How many dimes are there?",display:"⚫⚫",choices:['10','15','20','25']},
+  {type:'money',answer:'75',question:"You have 3 quarters. How many cents is that?",tip:"🔘 Each quarter is 25¢. Skip count by 25 — say a number once for each quarter. How many quarters are there?",display:"🔘🔘🔘",choices:['60','70','75','80']},
+
+  // ── HARDER COIN COMBOS ─────────────────────────────────────────────────────
+  {type:'money',answer:'67',question:"You have 2 quarters, 1 dime, 1 nickel, and 2 pennies. How many cents?",tip:"💰 Start with your biggest coins. Two quarters = 50¢. Then add the dime, the nickel, and each penny one at a time. Keep track as you go!",display:"🔘🔘+⚫+⚪+🟤🟤",choices:['62','65','67','72']},
+  {type:'money',answer:'90',question:"You have 3 quarters and 3 nickels. How many cents?",tip:"🔘 First add your 3 quarters (count by 25). Then add your 3 nickels (count by 5). Add those two totals together. What do you get?",display:"🔘🔘🔘+⚪⚪⚪",choices:['80','85','90','95']},
+  {type:'money',answer:'55',question:"You have 2 quarters and 1 nickel. How many cents?",tip:"💡 Two quarters — count by 25 twice. Then add the nickel (5¢). What is the total?",display:"🔘🔘+⚪",choices:['50','52','55','60']},
+  {type:'money',answer:'36',question:"You have 1 quarter, 1 dime, and 1 penny. How many cents?",tip:"💰 Start at 25¢ for the quarter. Add the dime (10¢): 25+10=? Then add the penny (1¢). Count up carefully!",display:"🔘+⚫+🟤",choices:['30','34','36','40']},
+  {type:'money',answer:'80',question:"You have 4 dimes and 4 nickels. How many cents?",tip:"⚫ Add your 4 dimes first (count by 10 four times). Then add your 4 nickels (count by 5 four times). Add the two totals.",display:"⚫⚫⚫⚫+⚪⚪⚪⚪",choices:['70','75','80','85']},
+
+  // ── SKIP COUNTING / HOW MANY COINS ────────────────────────────────────────
+  {type:'money',answer:'4',question:"How many quarters make $1.00 (100 cents)?",tip:"🔘 Each quarter is 25¢. Skip count by 25 until you reach 100. Count how many numbers you say — that's your answer!",display:"🔘🔘🔘🔘 = $1.00?",choices:['2','3','4','5']},
+  {type:'money',answer:'5',question:"How many dimes make 50 cents?",tip:"⚫ Each dime is 10¢. Skip count by 10 until you reach 50. Count how many times you said a number to get there!",display:"⚫⚫⚫⚫⚫ = 50¢?",choices:['3','4','5','6']},
+  {type:'money',answer:'6',question:"How many nickels make 30 cents?",tip:"⚪ Each nickel is 5¢. Skip count by 5 until you reach 30. Count how many numbers you said — that is your answer!",display:"⚪⚪⚪⚪⚪⚪ = 30¢?",choices:['3','5','6','8']},
+  {type:'money',answer:'10',question:"How many nickels make 50 cents?",tip:"⚪ Each nickel is 5¢. Skip count by 5 until you reach 50. Keep count of how many times you say a number!",display:"⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪ = 50¢?",choices:['5','8','10','12']},
+  {type:'money',answer:'20',question:"How many nickels make $1.00 (100 cents)?",tip:"⚪ Each nickel is worth 5¢. Skip count by 5 until you reach 100. How many times did you count? That is your answer!",display:"⚪ × ? = 100¢",choices:['10','15','20','25']},
+
+  // ── DOLLARS ────────────────────────────────────────────────────────────────
+  {type:'money',answer:'100',question:"How many pennies make exactly ONE dollar ($1.00)?",tip:"💵 One dollar = 100 cents. Each penny is worth 1 cent. How many 1s do you need to reach 100?",display:"💵 = ? 🟤",choices:['10','50','100','1000']},
+  {type:'money',answer:'$1.75',question:"You have 7 quarters. How many dollars and cents is that?",tip:"🔘 Each quarter = 25¢. Skip count by 25 seven times. Is your total more or less than 100¢? How many full dollars do you have left over?",display:"🔘🔘🔘🔘🔘🔘🔘",choices:['$1.50','$1.65','$1.75','$2.00']},
+  {type:'money',answer:'$2.00',question:"You have 8 quarters. How many dollars is that?",tip:"🔘 Each quarter = 25¢. You need 4 quarters to make $1.00. How many groups of 4 are in 8?",display:"🔘🔘🔘🔘🔘🔘🔘🔘",choices:['$1.50','$1.75','$2.00','$2.50']},
+  {type:'money',answer:'$1.35',question:"You have 1 dollar, 1 quarter, and 1 dime. How much money total?",tip:"💵 Start with the dollar ($1.00). A quarter is 25¢ — add it: $1.25. A dime is 10¢ — add it. What is your total?",display:"💵+🔘+⚫",choices:['$1.25','$1.30','$1.35','$1.45']},
+  {type:'money',answer:'$1.50',question:"You have 1 dollar and 2 quarters. How much money total?",tip:"💵 Start with $1.00. Each quarter is 25¢. Add 2 quarters: 25¢ + 25¢ = ? Add that to $1.00.",display:"💵+🔘🔘",choices:['$1.25','$1.40','$1.50','$2.00']},
+
+  // ── MAKING CHANGE ──────────────────────────────────────────────────────────
+  {type:'money',answer:'25',question:"You buy a pencil for 75¢ and pay with $1.00. How many cents do you get back?",tip:"💡 You paid $1.00 = 100¢. The pencil costs 75¢. Count up from 75 to 100. Or think: 100 minus 75. How much change is that?",display:"$1.00 - 75¢ = ?",choices:['15','20','25','35']},
+  {type:'money',answer:'50',question:"You buy a sticker for 50¢ and pay with $1.00. How much change do you get?",tip:"💡 You paid 100¢. The sticker costs 50¢. Think: what plus 50 makes 100? Or subtract: 100 - 50 = ?",display:"$1.00 - 50¢ = ?",choices:['25','40','50','60']},
+  {type:'money',answer:'15',question:"A lollipop costs 35¢. You pay with 2 quarters (50¢). How much change do you get back?",tip:"💡 You paid 50¢. The lollipop costs 35¢. Count up from 35 to 50. Or subtract: 50 - 35 = ?",display:"50¢ - 35¢ = ?",choices:['10','13','15','20']},
+  {type:'money',answer:'45',question:"You buy a pencil for 55¢ and pay with $1.00. How many cents change do you get?",tip:"💡 You paid 100¢. Count up from 55 to 100. Or subtract 55 from 100. Take it one step at a time!",display:"100¢ - 55¢ = ?",choices:['35','40','45','55']},
+  {type:'money',answer:'60',question:"A toy costs $1.40. You pay with $2.00. How many cents change do you receive?",tip:"💵 $2.00 = 200¢. $1.40 = 140¢. Subtract: 200 - 140 = ? Or count up from 140 to 200.",display:"$2.00 - $1.40 = ?¢",choices:['40','55','60','70']},
+
+  // ── COMPARING & WHICH IS MORE ──────────────────────────────────────────────
+  {type:'money',answer:'Dime',question:"Which coin is worth MORE — a nickel or a dime?",tip:"⚫ A nickel is worth 5¢. A dime is worth 10¢. Even though the dime is smaller, which has the higher value?",display:"⚪ 5¢  vs  ⚫ 10¢",choices:['Nickel','Dime','They are equal','Cannot tell']},
+  {type:'money',answer:'Quarter',question:"Which group has more money — 3 dimes or 1 quarter?",tip:"💡 Count your 3 dimes: each is 10¢, so 3 dimes = 30¢. A quarter = 25¢. Compare: which is larger, 30¢ or 25¢?",display:"⚫⚫⚫ vs 🔘",choices:['3 dimes','Quarter','They are equal','Cannot tell']},
+  {type:'money',answer:'Yes, exactly 56¢',question:"A snack costs 56¢. You have 2 quarters, 1 nickel, and 1 penny. Do you have enough?",tip:"💡 Figure out how much you have: 2 quarters + 1 nickel + 1 penny. Count each coin and add them up. Then compare to 56¢.",display:"🔘🔘+⚪+🟤 vs 56¢",choices:['Yes, exactly 56¢','No, only 50¢','Yes, I have 60¢','No, only 45¢']},
+  {type:'money',answer:'3 dimes',question:"Which group has more money — 3 dimes or 2 nickels?",tip:"💡 Three dimes: 10¢+10¢+10¢ = ? Two nickels: 5¢+5¢ = ? Which total is bigger?",display:"⚫⚫⚫ vs ⚪⚪",choices:['3 dimes','2 nickels','They are equal','Cannot tell']},
+
+  // ── WORD PROBLEMS ──────────────────────────────────────────────────────────
+  {type:'money',answer:'$1.05',question:"Marcus has 4 quarters and 1 nickel. How much money does he have?",tip:"🔘 Four quarters = $1.00 (count by 25 four times). Then add the nickel (5¢ = $0.05). What is the total?",display:"🔘🔘🔘🔘+⚪",choices:['$1.00','$1.05','$1.20','$1.25']},
+  {type:'money',answer:'40',question:"Sofia has 8 nickels. How many cents does she have?",tip:"⚪ Each nickel is 5¢. Skip count by 5 eight times: 5, 10, 15... keep going until you count all 8 nickels!",display:"⚪⚪⚪⚪⚪⚪⚪⚪",choices:['30','35','40','45']},
+  {type:'money',answer:'$0.32',question:"Jaylen has 3 dimes and 2 pennies. How much money is that in dollars and cents?",tip:"⚫ Three dimes = 30¢. Two pennies = 2¢. Add them: 30 + 2 = ? Write it with a dollar sign.",display:"⚫⚫⚫+🟤🟤",choices:['$0.25','$0.30','$0.32','$0.35']},
+];
+
+
+// ===== BUMPER CAR QUESTIONS (Array — grade level) =====
+const bumperQs = [
+  {type:'array',rows:3,cols:4,answer:12,question:"The bumper car track has 3 rows of cars with 4 cars in each row. How many cars total?",tip:"🚗 Count every dot carefully. Or try skip counting by 4 — say a number for each row you see. How many rows are there?",choices:[10,12,14,16]},
+  {type:'array',rows:2,cols:6,answer:12,question:"There are 2 rows of bumper cars with 6 cars each. How many cars?",tip:"🚗 Count all the dots row by row. Or skip count by 6 — say a number once for each row. How many rows do you see?",choices:[8,10,12,14]},
+  {type:'array',rows:4,cols:3,answer:12,question:"4 rows of bumper cones with 3 in each row. How many cones?",tip:"🚧 Point to each dot and count. Or skip count by 3 — say one number per row. How many rows are in this array?",choices:[9,11,12,15]},
+  {type:'array',rows:5,cols:2,answer:10,question:"5 rows of flashing lights with 2 lights each. How many lights?",tip:"💡 Count every dot in the array. Or skip count by 2 — say a number for each row you see. How many rows are there?",choices:[8,9,10,12]},
+  {type:'array',rows:3,cols:5,answer:15,question:"Bumper car tickets come in 3 rows of 5. How many tickets?",tip:"🎟️ Count every dot. Or try skip counting by 5 — say one number for each row. How many rows does this array have?",choices:[12,13,15,18]},
+  {type:'array',rows:6,cols:2,answer:12,question:"6 rows of safety barriers with 2 barriers each. How many?",tip:"🚧 Count every dot. Or skip count by 2 — say a number once for each row. There are 6 rows, so how many times will you skip count?",choices:[10,11,12,14]},
+  {type:'array',rows:4,cols:4,answer:16,question:"The bumper car arena has 4 rows of 4 seats. How many seats?",tip:"💺 This is a square array! Count all the dots, or skip count by 4. How many rows do you see?",choices:[12,14,16,20]},
+  {type:'array',rows:2,cols:8,answer:16,question:"2 rows of bumper car tokens with 8 tokens each. How many tokens?",tip:"🪙 Count all the dots. Or skip count by 8 — say a number once for each row. How many rows are there?",choices:[12,14,16,18]},
+  {type:'array',rows:5,cols:3,answer:15,question:"5 rows of checkered flags with 3 each. How many flags?",tip:"🏁 Point to each dot and count. Or skip count by 3 — say a number for each row. How many rows does this array have?",choices:[12,14,15,18]},
+  {type:'array',rows:3,cols:6,answer:18,question:"The crash pads come in 3 rows of 6. How many pads total?",tip:"🛡️ Count every dot carefully. Or skip count by 6 — say a number once for each row. How many rows are there?",choices:[15,16,18,21]},
+];
+
+// ===== ROLLER COASTER QUESTIONS (Challenge level) =====
+const rollerQs = [
+  {type:'array',rows:6,cols:7,answer:42,question:"The roller coaster has 6 cars with 7 seats in each car. How many seats total?",tip:"🎢 Count all the dots row by row. Or try skip counting by 7 — say a number for each row. How many rows are in this array?",choices:[35,40,42,48]},
+  {type:'array',rows:8,cols:4,answer:32,question:"8 rows of roller coaster wheels with 4 wheels each. How many wheels?",tip:"⚙️ Count every dot. Or skip count by 4 — say one number per row. How many rows does this array have?",choices:[28,30,32,36]},
+  {type:'array',rows:7,cols:5,answer:35,question:"The loop track has 7 sections with 5 bolts each. How many bolts?",tip:"🔩 Point to each dot and count carefully. Or try skip counting by 5. How many rows do you see?",choices:[30,33,35,40]},
+  {type:'array',rows:9,cols:3,answer:27,question:"9 rows of safety rails with 3 rails each. How many rails?",tip:"🛤️ Count every dot. Or skip count by 3 — say a number for each row. There are 9 rows, so you will count 9 times!",choices:[24,25,27,30]},
+  {type:'array',rows:6,cols:6,answer:36,question:"The coaster platform has 6 rows of 6 lights. How many lights?",tip:"💡 This is a square array! Count all the dots or skip count by 6. How many rows do you see?",choices:[30,34,36,42]},
+  {type:'array',rows:8,cols:3,answer:24,question:"8 rows of coaster cars with 3 passengers each. How many passengers?",tip:"🧑 Count every dot row by row. Or skip count by 3. How many rows does this array have?",choices:[20,22,24,27]},
+  {type:'array',rows:7,cols:4,answer:28,question:"7 sections of track with 4 support beams each. How many beams?",tip:"🏗️ Point to each dot and count out loud. Or skip count by 4 — say a number for each row. How many rows are there?",choices:[24,26,28,32]},
+  {type:'array',rows:5,cols:6,answer:30,question:"5 coaster trains with 6 seats each. How many seats total?",tip:"🚂 Count every dot carefully. Or skip count by 6 — say one number for each row. How many rows does this array have?",choices:[25,28,30,35]},
+  {type:'array',rows:9,cols:4,answer:36,question:"9 rows of coaster bolts with 4 bolts each. How many bolts?",tip:"🔩 Count all the dots row by row. Or skip count by 4. There are 9 rows — say a number for every row!",choices:[32,34,36,40]},
+  {type:'array',rows:6,cols:8,answer:48,question:"The big loop has 6 sections with 8 lights each. How many lights?",tip:"💡 Count every dot carefully. Or try skip counting by 8 — say a number once for each row. How many rows are there?",choices:[42,44,48,54]},
+];
+
+// ===== ARCADE GAMES DATA =====
+const arcadeGames = [
+  {id:'coin_drop',name:'Coin Drop Mania',emoji:'🪙',desc:'Drop coins to win!'},
+  {id:'balloon_pop',name:'Balloon Pop Challenge',emoji:'🎈',desc:'Pop the balloon with the right array answer! (6s, 7s, 8s, 9s)'},
+  {id:'skee_ball',name:'Skee-Ball Showdown',emoji:'🎳',desc:'Roll for the high score!'},
+  {id:'ring_toss',name:'Ring Toss Fever',emoji:'💍',desc:'Toss rings on bottles!'},
+  {id:'laser_tag',name:'Laser Tag Blaster',emoji:'🔫',desc:'Aim your laser & shoot the right answer target!'},
+];
+
+// ===== GIFT SHOP PRIZES =====
+const giftPrizes = [
+  // Small tier (5–15 tickets)
+  {name:'Stickers Pack',emoji:'⭐',tickets:5,price:2.99},
+  {name:'Temporary Tattoos',emoji:'🎨',tickets:5,price:1.99},
+  {name:'Bouncy Ball',emoji:'🟠',tickets:5,price:0.99},
+  {name:'Candy Bag',emoji:'🍬',tickets:7,price:1.49},
+  {name:'Mini Slime Cup',emoji:'🟢',tickets:8,price:2.49},
+  {name:'Rubber Bracelet',emoji:'🟡',tickets:5,price:0.99},
+  {name:'Fun Eraser Set',emoji:'🔤',tickets:6,price:1.49},
+  {name:'Keychain',emoji:'🔑',tickets:8,price:2.99},
+  {name:'Pop-It Mini',emoji:'🔵',tickets:10,price:3.99},
+  {name:'Glow Sticks',emoji:'✨',tickets:7,price:1.99},
+  {name:'Trading Cards',emoji:'🃏',tickets:10,price:4.99},
+  // Medium tier (15–35 tickets)
+  {name:'Small Plush Toy',emoji:'🧸',tickets:18,price:8.99},
+  {name:'Water Bottle',emoji:'💧',tickets:20,price:9.99},
+  {name:'Sunglasses',emoji:'🕶️',tickets:22,price:10.99},
+  {name:'LED Light-Up Toy',emoji:'💡',tickets:25,price:12.99},
+  {name:'Mini Board Game',emoji:'🎲',tickets:28,price:14.99},
+  {name:'Card Game (UNO)',emoji:'🃏',tickets:20,price:8.99},
+  {name:'Fidget Spinner',emoji:'🌀',tickets:15,price:5.99},
+  {name:'Cool Hat',emoji:'🧢',tickets:25,price:14.99},
+  {name:'Mini Backpack',emoji:'🎒',tickets:30,price:19.99},
+  {name:'Coloring Set',emoji:'🖍️',tickets:18,price:7.99},
+  {name:'Bracelet Kit',emoji:'💎',tickets:22,price:11.99},
+  // High tier (40–100 tickets)
+  {name:'Large Stuffed Animal',emoji:'🦁',tickets:45,price:29.99},
+  {name:'Headphones',emoji:'🎧',tickets:60,price:39.99},
+  {name:'Budget Tablet',emoji:'📱',tickets:100,price:79.99},
+  {name:'Gaming Controller',emoji:'🎮',tickets:80,price:59.99},
+  {name:'Smartwatch',emoji:'⌚',tickets:90,price:69.99},
+];
+
+// ===== PAUSE SYSTEM =====
+let gamePaused = false;
+function togglePause(){
+  gamePaused = !gamePaused;
+  const overlay = document.getElementById('pause-overlay');
+  const btn = document.getElementById('pause-btn');
+  if(gamePaused){
+    overlay.style.display='flex';
+    btn.textContent='▶️ Resume';
+    stopMasterClock();
+  } else {
+    overlay.style.display='none';
+    btn.textContent='⏸️ Pause';
+    const activeScreen = document.querySelector('.screen.active');
+    if(activeScreen && activeScreen.id==='road-screen') startMasterClock('road');
+    if(activeScreen && activeScreen.id==='park-screen') startMasterClock('park');
+  }
+}
+let clockRAF = null;
+let clockTriesLeft = 3;
+// Hand angles in degrees, 0 = pointing up (12 o'clock)
+let hourAngle = 0;   // start at 12
+let minAngle = 0;    // start at 12
+let dragging = null; // 'hour' | 'min' | null
+
+function stopClockCanvas(){
+  if(clockRAF){ cancelAnimationFrame(clockRAF); clockRAF = null; }
+  const c = document.getElementById('clock-canvas');
+  if(c){
+    c.onmousedown = null; c.ontouchstart = null;
+    window.onmousemove = null; window.onmouseup = null;
+    window.ontouchmove = null; window.ontouchend = null;
+  }
+}
+
+function startClockCanvas(){
+  clockTriesLeft = 3;
+  hourAngle = 0; minAngle = 0; dragging = null;
+  document.getElementById('clock-tries-left').textContent = 3;
+  document.getElementById('clock-feedback').textContent = '';
+  const canvas = document.getElementById('clock-canvas');
+  if(!canvas) return;
+
+  function getPos(e){
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const src = e.touches ? e.touches[0] : e;
+    return { x:(src.clientX-rect.left)*scaleX, y:(src.clientY-rect.top)*scaleY };
+  }
+
+  function angleFromCenter(pos){
+    const cx=canvas.width/2, cy=canvas.height/2;
+    return Math.atan2(pos.x-cx, cy-pos.y) * 180/Math.PI; // 0=up, clockwise positive
+  }
+
+  function nearHand(pos, handLen, angle){
+    const cx=canvas.width/2, cy=canvas.height/2;
+    const ang = (angle-90)*Math.PI/180;
+    const tx = cx + Math.cos(ang)*handLen;
+    const ty = cy + Math.sin(ang)*handLen;
+    const dx=pos.x-tx, dy=pos.y-ty;
+    // also check anywhere along the hand
+    const nearTip = Math.sqrt(dx*dx+dy*dy) < 28;
+    // check midpoint
+    const mx=cx+Math.cos(ang)*handLen*0.5, my=cy+Math.sin(ang)*handLen*0.5;
+    const nearMid = Math.sqrt((pos.x-mx)**2+(pos.y-my)**2) < 22;
+    return nearTip || nearMid;
+  }
+
+  function onDown(e){
+    e.preventDefault();
+    const pos = getPos(e);
+    const R = canvas.width/2 - 4;
+    if(nearHand(pos, R*0.72, minAngle)) dragging='min';
+    else if(nearHand(pos, R*0.52, hourAngle)) dragging='hour';
+  }
+
+  function onMove(e){
+    if(!dragging) return;
+    e.preventDefault();
+    const pos = getPos(e);
+    let ang = angleFromCenter(pos);
+    ang = ((ang % 360) + 360) % 360;
+    if(dragging==='min'){
+      minAngle = ang;
+      // hour follows minute: for every 360 of min, hour moves 30 deg
+      // We keep hour independent so student learns both
+    } else {
+      hourAngle = ang;
+    }
+    updateClockLabel();
+    drawClockStatic();
+  }
+
+  function onUp(){ dragging=null; canvas.style.cursor='grab'; }
+
+  canvas.onmousedown = onDown;
+  canvas.ontouchstart = onDown;
+  window.onmousemove = onMove;
+  window.ontouchmove = onMove;
+  window.onmouseup = onUp;
+  window.ontouchend = onUp;
+
+  drawClockStatic();
+  updateClockLabel();
+}
+
+function updateClockLabel(){
+  // minute: 0 deg = 12 oclock. Each minute = 6 deg
+  const minVal = Math.round(((minAngle % 360)+360)%360 / 6) % 60;
+  // hour: 0 deg = 12. Each hour = 30 deg
+  const hourVal = Math.round(((hourAngle % 360)+360)%360 / 30) % 12 || 12;
+  const el = document.getElementById('clock-time-text');
+  if(el) el.textContent = `${hourVal}:${String(minVal).padStart(2,'0')}`;
+}
+
+function drawClockStatic(){
+  const canvas = document.getElementById('clock-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  const cx=W/2, cy=H/2, R=W/2-4;
+
+  ctx.clearRect(0,0,W,H);
+
+  // Face gradient
+  const grad = ctx.createRadialGradient(cx,cy-R*0.2,R*0.1,cx,cy,R);
+  grad.addColorStop(0,'#FFFDE7'); grad.addColorStop(1,'#FFF9C4');
+  ctx.fillStyle=grad;
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#1E90FF'; ctx.lineWidth=6;
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+
+  // Minor ticks
+  for(let i=0;i<60;i++){
+    if(i%5===0) continue;
+    const a=(i/60)*Math.PI*2-Math.PI/2;
+    ctx.strokeStyle='#DCEDC8'; ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.cos(a)*(R-8),cy+Math.sin(a)*(R-8));
+    ctx.lineTo(cx+Math.cos(a)*(R-3),cy+Math.sin(a)*(R-3));
+    ctx.stroke();
+  }
+
+  // Hour numbers + major ticks
+  for(let i=1;i<=12;i++){
+    const a=(i/12)*Math.PI*2-Math.PI/2;
+    ctx.strokeStyle='#90CAF9'; ctx.lineWidth=2.5;
+    ctx.beginPath();
+    ctx.moveTo(cx+Math.cos(a)*(R-16),cy+Math.sin(a)*(R-16));
+    ctx.lineTo(cx+Math.cos(a)*(R-4),cy+Math.sin(a)*(R-4));
+    ctx.stroke();
+    const numR=R-33;
+    ctx.fillStyle='#2C3E50';
+    ctx.font='bold 17px "Fredoka One", cursive';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    // highlight 12 and 6
+    if(i===12||i===6){
+      ctx.fillStyle='#1E90FF';
+      ctx.font='bold 19px "Fredoka One", cursive';
+    } else {
+      ctx.fillStyle='#455A64';
+      ctx.font='bold 16px "Fredoka One", cursive';
+    }
+    ctx.fillText(String(i),cx+Math.cos(a)*numR,cy+Math.sin(a)*numR);
+  }
+
+  // Hour hand (dark, short)
+  const hAng = (hourAngle-90)*Math.PI/180;
+  const hLen = R*0.52;
+  ctx.strokeStyle='#2C3E50'; ctx.lineWidth=8; ctx.lineCap='round';
+  ctx.shadowColor='rgba(0,0,0,0.18)'; ctx.shadowBlur=4;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(hAng)*hLen,cy+Math.sin(hAng)*hLen); ctx.stroke();
+  // hour hand tail
+  ctx.lineWidth=5;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx-Math.cos(hAng)*(hLen*0.18),cy-Math.sin(hAng)*(hLen*0.18)); ctx.stroke();
+  ctx.shadowBlur=0;
+
+  // Minute hand (blue, long)
+  const mAng = (minAngle-90)*Math.PI/180;
+  const mLen = R*0.72;
+  ctx.strokeStyle='#1E90FF'; ctx.lineWidth=5; ctx.lineCap='round';
+  ctx.shadowColor='rgba(30,144,255,0.25)'; ctx.shadowBlur=5;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(mAng)*mLen,cy+Math.sin(mAng)*mLen); ctx.stroke();
+  ctx.lineWidth=3;
+  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx-Math.cos(mAng)*(mLen*0.18),cy-Math.sin(mAng)*(mLen*0.18)); ctx.stroke();
+  ctx.shadowBlur=0;
+
+  // Drag hints on tips
+  function drawGrip(ang, len, color){
+    const tx=cx+Math.cos(ang)*len, ty=cy+Math.sin(ang)*len;
+    ctx.fillStyle=color+'55';
+    ctx.beginPath(); ctx.arc(tx,ty,12,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle=color; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(tx,ty,12,0,Math.PI*2); ctx.stroke();
+  }
+  drawGrip(hAng, hLen, '#2C3E50');
+  drawGrip(mAng, mLen, '#1E90FF');
+
+  // Center
+  ctx.fillStyle='#FF6B6B';
+  ctx.beginPath(); ctx.arc(cx,cy,7,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#C0392B'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.arc(cx,cy,7,0,Math.PI*2); ctx.stroke();
+
+  // Legend
+  ctx.font='12px Nunito, sans-serif';
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(44,62,80,0.6)';
+  ctx.fillText('short = hours',8,H-24);
+  ctx.fillStyle='rgba(30,144,255,0.7)';
+  ctx.fillText('long = minutes',8,H-10);
+}
+
+function checkClockTime(){
+  const minNorm = ((minAngle%360)+360)%360;
+  const hourNorm = ((hourAngle%360)+360)%360;
+  // minute hand pointing at 12 = 0 deg, tolerance ±15 deg (2.5 min)
+  const minOk = minNorm<=15 || minNorm>=345;
+  // hour hand pointing at 6 = 180 deg, tolerance ±15 deg
+  const hDiff = Math.min(Math.abs(hourNorm-180), 360-Math.abs(hourNorm-180));
+  const hourOk = hDiff<=15;
+
+  const fb = document.getElementById('clock-feedback');
+  if(minOk && hourOk){
+    fb.textContent='🎉 YES! That\'s 6:00! Amazing job! Time to hit the road!';
+    fb.style.color='#2E7D32';
+    playSound('correct');
+    G.alarmHour=6; G.gameTime=6*3600; // 6:00 AM in seconds
+    if(G.clockTries!==undefined) delete G.clockTries;
+    setTimeout(()=>{
+      stopClockCanvas(); updateUI();
+      showScreen('gas-screen');
+      document.getElementById('gas-money-display').textContent=G.money.toFixed(2);
+    },2000);
+  } else {
+    clockTriesLeft--;
+    if(G.clockTries!==undefined) G.clockTries=clockTriesLeft;
+    playSound('wrong');
+    if(clockTriesLeft<=0){
+      fb.textContent="Oh no! You used all 3 tries. Let's start over and practice!";
+      fb.style.color='#B71C1C';
+      setTimeout(()=>loseGame("You couldn't set the alarm to 6:00 AM! Remember: short dark hand on 6, long blue hand on 12. Try again!"),2500);
+      return;
+    }
+    document.getElementById('clock-tries-left').textContent=clockTriesLeft;
+    let msg='';
+    if(!hourOk&&!minOk) msg=`Not quite! Move the short (dark) hand to the 6 AND the long (blue) hand to the 12. ${clockTriesLeft} tr${clockTriesLeft===1?'y':'ies'} left!`;
+    else if(!hourOk) msg=`The short dark hand needs to point to the 6! ${clockTriesLeft} tr${clockTriesLeft===1?'y':'ies'} left!`;
+    else msg=`The long blue hand needs to point to the 12! ${clockTriesLeft} tr${clockTriesLeft===1?'y':'ies'} left!`;
+    fb.textContent=msg; fb.style.color='#E65100';
+  }
+}
+
+// ===== SCREENS =====
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='clock-screen'){
+    hourAngle=0; minAngle=0; dragging=null; clockTriesLeft=3;
+    if(G.clockTries!==undefined) delete G.clockTries;
+    setTimeout(startClockCanvas,50);
+  } else {
+    stopClockCanvas();
+  }
+}
+
+function updateUI(){
+  document.getElementById('money-display').textContent=`💰 $${G.money.toFixed(2)}`;
+  const stars=Math.max(0,5-Math.floor(G.misses));
+  G.stars=stars;
+  document.getElementById('stars-display').textContent='⭐'.repeat(stars)+'☆'.repeat(5-stars);
+  document.getElementById('miss-display').textContent=`❌ Misses: ${G.misses}/${G.maxMisses}`;
+  // gameTime in seconds
+  const totalSec = G.gameTime;
+  const h = Math.floor(totalSec/3600);
+  const m = Math.floor((totalSec%3600)/60);
+  const s = totalSec%60;
+  const ampm = h>=12?'PM':'AM';
+  const dh = h>12?h-12:(h===0?12:h);
+  document.getElementById('time-display').textContent=`🕐 ${dh}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')} ${ampm}`;
+  const tracker=document.getElementById('park-q-tracker');
+  if(tracker) tracker.textContent=`📋 Questions: ${G.parkQAnswered} / ${G.parkQRequired} | 🎟️ Tickets: ${G.tickets||0}`;
+}
+
+// ===== STORE =====
+function startGame(){ buildStore(); showScreen('store-screen'); updateUI(); }
+
+function buildStore(){
+  let html='';
+  for(const[key,section] of Object.entries(storeData)){
+    html+=`<div class="store-section"><div class="section-title">${section.title}</div><div class="items-grid">`;
+    section.items.forEach((item,idx)=>{
+      const id=`${key}-${idx}`;
+      G.cartItems[id]=0;
+      html+=`<div class="store-item" id="item-${id}">
+        <div class="item-emoji">${item.emoji}</div>
+        <div class="item-name">${item.name}</div>
+        <div class="item-brand">${item.brand}</div>
+        <div class="item-price">$${item.price.toFixed(2)}</div>
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="changeQty('${id}','${key}',${idx},-1)">−</button>
+          <span class="qty-display" id="qty-${id}">0</span>
+          <button class="qty-btn" onclick="changeQty('${id}','${key}',${idx},1)">+</button>
+        </div>
+      </div>`;
+    });
+    html+='</div></div>';
+  }
+  document.getElementById('store-content').innerHTML=html;
+  updateCartDisplay();
+}
+
+function changeQty(id,section,idx,delta){
+  const item=storeData[section].items[idx];
+  if(delta>0&&G.money-G.cartTotal-item.price<0){alert("You don't have enough money to add that! 💸");return;}
+  G.cartItems[id]=Math.max(0,G.cartItems[id]+delta);
+  document.getElementById(`qty-${id}`).textContent=G.cartItems[id];
+  document.getElementById(`item-${id}`).classList.toggle('selected',G.cartItems[id]>0);
+  updateCartDisplay();
+}
+
+function updateCartDisplay(){
+  let total=0;
+  for(const[id,qty] of Object.entries(G.cartItems)){
+    const[section,idx]=id.split('-');
+    if(storeData[section]) total+=qty*storeData[section].items[parseInt(idx)].price;
+  }
+  G.cartTotal=total;
+  document.getElementById('cart-total').textContent=total.toFixed(2);
+  document.getElementById('money-remaining').textContent=(G.money-total).toFixed(2);
+}
+
+function checkoutStore(){
+  if(G.cartTotal===0){
+    alert("📌 You MUST buy at least one item before you leave for the trip! Pick something — even one small thing is fine! 🛒");
+    return;
+  }
+  if(G.money-G.cartTotal<0){
+    alert("You've gone over your $2,000 budget! Please remove some items. 💸");
+    return;
+  }
+  G.money-=G.cartTotal; G.cartTotal=0;
+  updateUI(); showScreen('clock-screen');
+}
+
+// ===== MASTER CLOCK (HH:MM:SS real-time, no skipping) =====
+// G.gameTime = total seconds from midnight (not minutes)
+// We store in seconds now for precision
+let masterClockInterval = null;
+let clockPhase = null; // 'road' | 'park' | null
+
+function startMasterClock(phase){
+  clockPhase = phase;
+  if(masterClockInterval) clearInterval(masterClockInterval);
+  masterClockInterval = setInterval(()=>{
+    if(gamePaused) return;
+    G.gameTime++; // 1 real second = 1 game second (1:1 ratio for display accuracy)
+    updateUI();
+    if(clockPhase==='road' && G.gameTime >= 11*3600){
+      clearInterval(masterClockInterval);
+      loseGame("You ran out of time! You didn't make it to Dream Hotel before 11:00 AM. ⏰");
+    }
+    if(clockPhase==='park' && G.gameTime >= 20*3600){
+      clearInterval(masterClockInterval);
+      checkParkWinCondition();
+    }
+  }, 80); // 80ms real = 1 game second (speeds up clock ~12.5x so students feel urgency)
+}
+
+function stopMasterClock(){
+  if(masterClockInterval){ clearInterval(masterClockInterval); masterClockInterval=null; }
+  clockPhase=null;
+}
+
+// Keep these stubs so existing calls don't break
+function startRoadTimer(){ startMasterClock('road'); }
+function stopRoadTimer(){ stopMasterClock(); }
+function startParkTimer(){ startMasterClock('park'); }
+function stopParkTimer(){ stopMasterClock(); }
+
+// ===== GAS =====
+function fillGas(){
+  if(G.money<70){loseGame("You ran out of money for gas! The trip is cancelled. 😢");return;}
+  G.money-=70;
+  G.gameTime = G.alarmHour*3600 + 30*60; // 6:30 AM in seconds
+  updateUI(); buildRoadTrip(); showScreen('road-screen');
+  startMasterClock('road');
+}
+
+// ===== ROAD =====
+function buildRoadTrip(){
+  const aq=[...arrayQs].sort(()=>Math.random()-0.5).slice(0,5);
+  const mq=[...moneyQs].sort(()=>Math.random()-0.5).slice(0,7);
+  G.roadQuestions=[...aq,...mq].sort(()=>Math.random()-0.5);
+  G.currentRoadQ=0;G.wrongAttemptsOnQuestion=0;
+  showNextRoadQuestion();
+}
+
+function showNextRoadQuestion(){
+  if(G.currentRoadQ>=G.roadQuestions.length){G.arrivalTime=G.gameTime;showHotel();return;}
+  if(G.gameTime>=11*3600){loseGame("You didn't make it to Dream Hotel before 11:00 AM! The reservation was cancelled! ⏰");return;}
+  const q=G.roadQuestions[G.currentRoadQ];
+  const progress=Math.round((G.currentRoadQ/G.roadQuestions.length)*100);
+  document.getElementById('road-progress').style.width=`${progress}%`;
+  document.getElementById('road-percent').textContent=`${progress}%`;
+  let viz='';
+  if(q.type==='array'){
+    viz='<div class="array-visual">';
+    for(let r=0;r<q.rows;r++){
+      viz+='<div class="array-row">';
+      for(let c=0;c<q.cols;c++) viz+='<div class="array-dot"></div>';
+      viz+='</div>';
+    }
+    viz+=`<div style="margin-top:8px;font-size:0.85em;color:#555;">📐 ${q.rows} rows × ${q.cols} columns — Count the dots yourself!</div></div>`;
+  }
+  if(q.type==='money'&&q.display){
+    viz=`<div style="font-size:1.8em;text-align:center;padding:10px;background:#FFFDF0;border-radius:10px;margin:10px 0;">${q.display}</div>`;
+  }
+  const badgeClass=q.type==='array'?'badge-array':'badge-money';
+  const badgeText=q.type==='array'?'🧮 Array Question':'💰 Money Question';
+  const choicesBtns=q.choices.map(c=>`<button class="choice-btn" onclick="checkRoadAnswer(this,'${c}','${q.answer}')">${c}</button>`).join('');
+  document.getElementById('road-question-area').innerHTML=`
+    <div class="question-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div class="question-type-badge ${badgeClass}">${badgeText}</div>
+        <button onclick="if(confirm('Back out? This question will count as a miss if you come back to it.')) buildPark()" style="display:none">skip</button>
+      </div>
+      <p style="font-size:0.8em;color:#888;margin-bottom:8px;">Question ${G.currentRoadQ+1} of ${G.roadQuestions.length}</p>
+      <div class="tip-box">💡 <strong>Helpful Tip:</strong> ${q.tip}</div>
+      <div class="question-text">${q.question}</div>
+      ${viz}
+      <div class="choices-grid">${choicesBtns}</div>
+      <div class="feedback-msg feedback-correct" id="road-fc">✅ Correct! Great job, Math Star! Keep going!</div>
+      <div class="feedback-msg feedback-wrong" id="road-fw">❌ Not quite! Think about the tip and try again!</div>
+    </div>`;
+  G.wrongAttemptsOnQuestion=0;
+}
+
+function checkRoadAnswer(btn,chosen,correct){
+  const isOk=chosen.toString()===correct.toString();
+  if(isOk){
+    btn.classList.add('correct');
+    document.querySelectorAll('#road-question-area .choice-btn').forEach(b=>b.disabled=true);
+    document.getElementById('road-fc').style.display='block';
+    playSound('correct');G.correctAnswers++;G.gameTime+=900;G.currentRoadQ++;G.wrongAttemptsOnQuestion=0;
+    updateUI();setTimeout(showNextRoadQuestion,1800);
+  }else{
+    btn.classList.add('wrong');playSound('wrong');G.wrongAttemptsOnQuestion++;
+    document.getElementById('road-fw').style.display='block';
+    setTimeout(()=>{
+      btn.classList.remove('wrong');
+      document.getElementById('road-fw').style.display='none';
+      if(G.wrongAttemptsOnQuestion>=2) showGasAlert();
+    },1000);
+  }
+}
+
+function showGasAlert(){
+  G.misses++;updateUI();
+  if(G.misses>G.maxMisses){loseGame("You missed too many questions on the road! 😢 Start over and remember to use the tips!");return;}
+  if(G.money<90){loseGame("You ran out of gas AND don't have $90 for a refill! 😢 Always save money for emergencies!");return;}
+  playSound('gas');G.money-=90;updateUI();
+  document.getElementById('road-question-area').innerHTML=`
+    <div class="gas-alert">
+      <h3>⛽ Oh No! Out of Gas!</h3>
+      <p>You got 2 wrong answers on the same question. The car ran out of gas!</p>
+      <p>💸 You paid <strong>$90</strong> ($70 gas + $20 service fee).</p>
+      <p>Money left: <strong>$${G.money.toFixed(2)}</strong></p>
+      <p>❤️ You have <strong>${G.maxMisses-G.misses}</strong> more chances before the game ends!</p>
+      <button class="big-btn" onclick="continueAfterGas()">⛽ Refill & Keep Driving!</button>
+    </div>`;
+}
+
+function continueAfterGas(){
+  G.wrongAttemptsOnQuestion=0;G.currentRoadQ++;G.gameTime+=1800;updateUI();showNextRoadQuestion();
+}
+
+// ===== HOTEL =====
+function showHotel(){
+  stopMasterClock(); // pause clock at hotel
+  const h=Math.floor(G.gameTime/3600);
+  const m=Math.floor((G.gameTime%3600)/60);
+  const ampm=h>=12?'PM':'AM';
+  const dh=h>12?h-12:(h===0?12:h);
+  document.getElementById('arrival-time-display').textContent=`${dh}:${m.toString().padStart(2,'0')} ${ampm}`;
+  document.getElementById('hotel-money').textContent=G.money.toFixed(2);
+  showScreen('hotel-screen');playSound('correct');
+}
+
+function goToPark(){
+  G.parkQAnswered=0; G.completedActivities=[]; G.mandatoryCompleted=[];
+  G.tickets=0; G.arcadeGamesCompleted=0; G.arcadeCompleted=[]; G._arcadeSession=null;
+  G.foodItemsOrdered=0; G.foodMisses=0; G.foodMissesThisItem=0; G.currentFoodItem=null; G.foodQAnswered=0;
+  updateUI(); buildPark(); showScreen('park-screen');
+  startMasterClock('park');
+}
+
+// ===== PARK WIN CONDITION CHECK =====
+// Called when park closes at 8pm OR when manually checking
+function checkParkWinCondition(){
+  const mandatory = G.mandatoryCompleted || [];
+  const mandatoryDone = mandatory.length >= 3; // need at least 3 water activities
+  const arcadeDone = (G.arcadeGamesCompleted||0) >= 2;
+  const foodDone = (G.foodItemsOrdered||0) >= 3;
+  const qDone = G.parkQAnswered >= G.parkQRequired; // 160 total
+
+  if(mandatoryDone && arcadeDone && foodDone && qDone){
+    winGame();
+  } else {
+    const missing = [];
+    if(!mandatoryDone) missing.push(`${3 - mandatory.length} more water activit${3-mandatory.length===1?'y':'ies'}`);
+    if(!arcadeDone) missing.push(`${2-(G.arcadeGamesCompleted||0)} more arcade game${(G.arcadeGamesCompleted||0)===1?'':'s'}`);
+    if(!foodDone) missing.push(`${3-(G.foodItemsOrdered||0)} more food item${(G.foodItemsOrdered||0)===2?'':'s'}`);
+    if(!qDone) missing.push(`${G.parkQRequired-G.parkQAnswered} more questions`);
+    loseGame(`The park closed at 8:00 PM! You still needed: ${missing.join(', ')}. Manage your time better next time!`);
+  }
+}
+
+// ===== PARK =====
+let parkAllQs=[];
+
+function buildPark(){
+  parkAllQs=[...arrayQs,...moneyQs].sort(()=>Math.random()-0.5);
+  document.getElementById('park-money-display').textContent=G.money.toFixed(2);
+  const tracker=document.getElementById('park-q-tracker');
+  if(tracker) tracker.textContent=`📋 Questions: ${G.parkQAnswered}/${G.parkQRequired} | 🎟️ Tickets: ${G.tickets||0}`;
+
+  const allQsDone = G.parkQAnswered>=G.parkQRequired;
+  const hasArcadeClear = (G.tickets||0)>=2 || G.money>=20;
+
+  let html='';
+  [
+    {id:'water',emoji:'🌊',name:'Water Slides!',desc:'Mandatory — complete all slides!',cls:'area-water'},
+    {id:'bumper',emoji:'🚗',name:'Bumper Cars!',desc:'Crash into friends! Array questions!',cls:'area-water'},
+    {id:'coaster',emoji:'🎢',name:'Roller Coaster!',desc:'The ultimate thrill! Hard arrays!',cls:'area-water'},
+    {id:'food',emoji:'🍦',name:'Food Court!',desc:allQsDone?'Come get your food! 🎉':'Finish 20 questions first!',cls:'area-food'},
+    {id:'arcade',emoji:'🕹️',name:'Arcade!',desc:'Win tickets for prizes!',cls:'area-arcade'},
+    {id:'giftshop',emoji:'🎁',name:'Gift Shop!',desc:(G.tickets||0)>=2||(G.money>=20)?'Spend tickets or cash!':'Need 2 tickets or $20 to enter!',cls:`area-${(G.tickets||0)>=2||(G.money>=20)?'food':'water'}`},
+  ].forEach(a=>{
+    html+=`<div class="park-area ${a.cls}" onclick="enterParkArea('${a.id}')">
+      <div class="area-emoji">${a.emoji}</div>
+      <h3>${a.name}</h3><p>${a.desc}</p>
+    </div>`;
+  });
+  document.getElementById('park-areas-grid').innerHTML=html;
+  document.getElementById('park-activity-area').innerHTML='';
+}
+
+function enterParkArea(area){
+  if(area==='water') showWaterArea();
+  else if(area==='bumper') showBumperCars();
+  else if(area==='coaster') showRollerCoaster();
+  else if(area==='food') showFoodArea();
+  else if(area==='arcade') showArcadeArea();
+  else if(area==='giftshop') showGiftShop();
+}
+
+// ===== WATER AREA =====
+// Mandatory activities students must all complete
+const MANDATORY_RIDES = ['fast','twisty','drop','wave','raft','bumper','coaster','pool_array'];
+
+function showWaterArea(){
+  const rideInfo = {
+    fast:{label:'Fast Slide',emoji:'⚡',desc:'Straight & super fast!',mandatory:true},
+    twisty:{label:'Twisty Slide',emoji:'🌀',desc:'Loops and turns!',mandatory:true},
+    drop:{label:'Straight Drop',emoji:'📉',desc:'Drops straight down!',mandatory:true},
+    lazy:{label:'Lazy River',emoji:'🛶',desc:'Just for fun! $5 fee, no math!',mandatory:false},
+    wave:{label:'Wave Pool',emoji:'🌊',desc:'Feels like the ocean!',mandatory:true},
+    raft:{label:'Group Raft',emoji:'🚣',desc:'Ride with friends!',mandatory:true},
+    pool_array:{label:'Array of Fun in the Pool',emoji:'🏊',desc:'10 array questions — splashy math!',mandatory:true},
+  };
+  const mandatoryNames = ['Fast Slide','Twisty Slide','Straight Drop','Wave Pool','Group Raft','Array of Fun in the Pool'];
+  let html=`<div class="store-section">
+    <div class="section-title">🌊 Water Activities</div>
+    <div style="background:#E3F2FD;border-radius:14px;padding:14px 18px;margin-bottom:14px;border:3px solid #1565C0;">
+      <p style="font-family:'Fredoka One',cursive;font-size:1.1em;color:#0D47A1;margin-bottom:8px;">⭐ REQUIRED WATER ACTIVITIES — You MUST complete ALL of these:</p>
+      <p style="font-size:1.05em;font-weight:800;color:#B71C1C;line-height:1.8;">
+        ✅ <strong>Fast Slide</strong> &nbsp;|&nbsp; ✅ <strong>Twisty Slide</strong> &nbsp;|&nbsp; ✅ <strong>Straight Drop</strong><br>
+        ✅ <strong>Wave Pool</strong> &nbsp;|&nbsp; ✅ <strong>Group Raft</strong> &nbsp;|&nbsp; ✅ <strong>Array of Fun in the Pool</strong>
+      </p>
+      <p style="font-size:0.85em;color:#1565C0;margin-top:6px;">Plus: <strong>Bumper Cars</strong> and <strong>Roller Coaster</strong> (found on the Park Map)</p>
+    </div>
+    <div class="slide-options">`;
+  Object.entries(rideInfo).forEach(([key,r])=>{
+    const done = G.completedActivities.includes(key);
+    const doneTag = done ? '<div style="color:#2E7D32;font-size:0.8em;font-weight:700;">✅ Done!</div>' : '';
+    const mandTag = r.mandatory ? '<div style="font-size:0.65em;opacity:0.9;color:#FFD700;">⭐ Required</div>' : '<div style="font-size:0.65em;opacity:0.85;">🎉 Just for fun!</div>';
+    html+=`<div class="slide-option${done?' ':''}" onclick="doSlideActivity('${key}')" style="${done?'border:3px solid #4CAF50;background:rgba(76,175,80,0.15);':''}${key==='lazy'?'background:linear-gradient(135deg,#56ab2f,#a8e063);':''}${key==='pool_array'?'background:linear-gradient(135deg,#0288D1,#29B6F6);':''}">
+      <div class="slide-emoji">${r.emoji}</div>
+      <strong>${r.label}</strong>${doneTag}${mandTag}
+      <div style="font-size:0.65em;opacity:0.8;">${r.desc}</div>
+    </div>`;
+  });
+  html+=`</div><button class="btn-sm" onclick="buildPark()">⬅️ Back to Park Map</button></div>`;
+  document.getElementById('park-activity-area').innerHTML=html;
+  document.getElementById('park-areas-grid').innerHTML='';
+}
+
+function doSlideActivity(type){
+  if(type==='lazy'){ startLazyRiver(); return; }
+  if(type==='pool_array'){ startPoolArray(); return; }
+  G.gameTime+=900; updateUI();
+  const msgs={
+    fast:"🎉 WHEEE! That was the fastest slide EVER! What a rush!",
+    twisty:"🌀 You spun around and around — dizzy but SO fun!",
+    drop:"😱 Your stomach dropped! That was AMAZING!",
+    wave:"🌊 The waves felt just like the real ocean! Splash splash!",
+    raft:"🚣 You laughed the whole way down with your friends!"
+  };
+  showParkQuestion(getParkQuestion(),()=>{
+    if(!G.completedActivities.includes(type)) G.completedActivities.push(type);
+    const remaining = MANDATORY_RIDES.filter(r=>!G.completedActivities.includes(r));
+    const nameMap={fast:'Fast Slide',twisty:'Twisty Slide',drop:'Straight Drop',wave:'Wave Pool',raft:'Group Raft',bumper:'Bumper Cars',coaster:'Roller Coaster',pool_array:'Array of Fun in the Pool'};
+    document.getElementById('park-activity-area').innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:4em;">🎢</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:var(--water);font-size:1.5em;">Amazing Ride! ${msgs[type]}</h3>
+        <p style="font-size:0.95em;color:#666;margin:10px 0;">You still need to answer <strong>${G.parkQRequired - G.parkQAnswered}</strong> more question(s) before 8:00 PM!</p>
+        ${remaining.length>0?`<p style="color:#FF6B6B;font-size:0.9em;font-weight:700;">⭐ Still need: ${remaining.map(r=>nameMap[r]).join(', ')}</p>`:'<p style="color:#2E7D32;font-weight:700;">✅ All mandatory activities complete!</p>'}
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:14px;flex-wrap:wrap;">
+          <button class="big-btn" style="font-size:1em;padding:12px 24px;" onclick="doSlideActivity('${type}')">➡️ Next Question!</button>
+          <button class="btn-sm" onclick="showWaterArea()">🌊 More Rides</button>
+          <button class="btn-sm" onclick="buildPark()">🗺️ Park Map</button>
+        </div>
+      </div>`;
+    playSound('splash');
+  }, ()=>showWaterArea());
+}
+
+// ===== ARRAY OF FUN IN THE POOL =====
+function startPoolArray(){
+  poolArraySession = {
+    qs: [...arrayQs].sort(()=>Math.random()-0.5).slice(0,10),
+    current: 0, active: true
+  };
+  showPoolArrayQuestion();
+}
+
+function showPoolArrayQuestion(){
+  const sess = poolArraySession;
+  if(!sess.active) return;
+  if(sess.current>=sess.qs.length){
+    if(!G.completedActivities.includes('pool_array')) G.completedActivities.push('pool_array');
+    const remaining=MANDATORY_RIDES.filter(r=>!G.completedActivities.includes(r));
+    document.getElementById('park-activity-area').innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:4em;">🏊🎉</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:var(--water);font-size:1.5em;">Pool Array Complete!</h3>
+        <p>You answered all 10 pool array questions! Amazing splashy math! 🌊</p>
+        ${remaining.length>0?`<p style="color:#FF6B6B;font-size:0.9em;margin-top:8px;">⭐ Still need: ${remaining.map(r=>({fast:'Fast Slide',twisty:'Twisty Slide',drop:'Straight Drop',wave:'Wave Pool',raft:'Group Raft',bumper:'Bumper Cars',coaster:'Roller Coaster',pool_array:'Array of Fun in the Pool'})[r]).join(', ')}</p>`:'<p style="color:#2E7D32;font-weight:700;">✅ All mandatory activities complete!</p>'}
+        <br><button class="btn-sm" onclick="showWaterArea()">🌊 More Water Fun</button>
+        <button class="btn-sm" onclick="buildPark()">🗺️ Park Map</button>
+      </div>`;
+    playSound('win');
+    startParkTimer();
+    return;
+  }
+  const q = sess.qs[sess.current];
+  let viz='<div class="array-visual">';
+  for(let r=0;r<q.rows;r++){
+    viz+='<div class="array-row">';
+    for(let c=0;c<q.cols;c++) viz+='<div class="array-dot" style="background:linear-gradient(135deg,#29B6F6,#0288D1);border-color:#01579B;"></div>';
+    viz+='</div>';
+  }
+  viz+=`<div style="margin-top:8px;font-size:0.85em;color:#0277BD;">🏊 ${q.rows} rows × ${q.cols} columns — Count ALL the dots!</div></div>`;
+  document.getElementById('park-areas-grid').innerHTML='';
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="question-card" style="border-top:5px solid #0288D1;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div class="question-type-badge badge-array">🏊 Array of Fun in the Pool</div>
+        <button onclick="exitPoolArray()" style="background:#FFE0E0;border:2px solid #FF6B6B;color:#C0392B;border-radius:20px;padding:5px 14px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.85em;">🚪 Back Out</button>
+      </div>
+      <div style="font-size:0.8em;color:#888;margin-bottom:6px;">Pool Array Question ${sess.current+1} of 10 &nbsp;|&nbsp; Park Q: ${G.parkQAnswered}/${G.parkQRequired}</div>
+      <div class="tip-box">💡 <strong>Helpful Tip:</strong> ${q.tip}</div>
+      <div class="question-text">${q.question}</div>
+      ${viz}
+      <div class="choices-grid" id="pool-choices">
+        ${q.choices.map(c=>`<button class="choice-btn" onclick="checkPoolAnswer(this,'${c}','${q.answer}')">${c}</button>`).join('')}
+      </div>
+      <div class="feedback-msg feedback-correct" id="pool-fc">✅ Splash! Correct! 🌊</div>
+      <div class="feedback-msg feedback-wrong" id="pool-fw">❌ Not quite! Try again!</div>
+    </div>`;
+}
+
+function exitPoolArray(){
+  poolArraySession.active=false;
+  startParkTimer();
+  showWaterArea();
+}
+
+function checkPoolAnswer(btn,chosen,correct){
+  const isOk=chosen.toString()===correct.toString();
+  if(isOk){
+    btn.classList.add('correct');
+    document.querySelectorAll('#pool-choices .choice-btn').forEach(b=>b.disabled=true);
+    document.getElementById('pool-fc').style.display='block';
+    playSound('correct'); G.correctAnswers++; G.parkQAnswered++;
+    updateUI();
+    const tracker=document.getElementById('park-q-tracker');
+    if(tracker) tracker.textContent=`📋 Park Questions: ${G.parkQAnswered} / ${G.parkQRequired} answered | 🎟️ Tickets: ${G.tickets||0}`;
+    poolArraySession.current++;
+    setTimeout(showPoolArrayQuestion, 1600);
+  } else {
+    btn.classList.add('wrong'); playSound('wrong');
+    document.getElementById('pool-fw').style.display='block';
+    setTimeout(()=>{ btn.classList.remove('wrong'); document.getElementById('pool-fw').style.display='none'; }, 900);
+  }
+}
+
+// ===== BUMPER CARS =====
+function showBumperCars(){
+  document.getElementById('park-areas-grid').innerHTML='';
+  const done = G.completedActivities.includes('bumper');
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="store-section">
+      <div class="section-title">🚗 Bumper Cars!</div>
+      <div class="intro-box" style="margin-bottom:10px;">
+        <p>💥 Crash and bash in the bumper car arena! Answer an <strong>array question</strong> to ride!</p>
+        ${done?'<p style="color:#2E7D32;font-weight:700;">✅ You already rode the bumper cars! Ride again for fun!</p>':'<p>⭐ This is one of your required activities!</p>'}
+      </div>
+      <div style="text-align:center;margin:16px 0;">
+        <div style="font-size:5em;">🚗💥🚗</div>
+      </div>
+      <div style="text-align:center;">
+        <button class="big-btn" onclick="doBumperRide()">🚗 Ride Bumper Cars!</button>
+        <br><button class="btn-sm" onclick="buildPark()" style="margin-top:12px;">⬅️ Back to Park Map</button>
+      </div>
+    </div>`;
+}
+
+function doBumperRide(){
+  G.gameTime+=900; updateUI();
+  const q = bumperQs[Math.floor(Math.random()*bumperQs.length)];
+  showParkQuestion(q, ()=>{
+    if(!G.completedActivities.includes('bumper')) G.completedActivities.push('bumper');
+    const remaining=MANDATORY_RIDES.filter(r=>!G.completedActivities.includes(r));
+    const nameMap={fast:'Fast Slide',twisty:'Twisty Slide',drop:'Straight Drop',wave:'Wave Pool',raft:'Group Raft',bumper:'Bumper Cars',coaster:'Roller Coaster',pool_array:'Array of Fun in the Pool'};
+    document.getElementById('park-activity-area').innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:4em;">🚗💥</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:var(--water);font-size:1.5em;">CRASH! Amazing!</h3>
+        <p style="font-size:0.95em;color:#666;margin:8px 0;">You still need to answer <strong>${G.parkQRequired - G.parkQAnswered}</strong> more question(s) before 8:00 PM!</p>
+        ${remaining.length>0?`<p style="color:#FF6B6B;font-size:0.9em;font-weight:700;">⭐ Still need: ${remaining.map(r=>nameMap[r]).join(', ')}</p>`:'<p style="color:#2E7D32;font-weight:700;">✅ All mandatory activities complete!</p>'}
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:14px;flex-wrap:wrap;">
+          <button class="big-btn" style="font-size:1em;padding:12px 24px;" onclick="doBumperRide()">➡️ Next Question!</button>
+          <button class="btn-sm" onclick="showBumperCars()">🚗 Exit Bumper Cars</button>
+          <button class="btn-sm" onclick="buildPark()">🗺️ Park Map</button>
+        </div>
+      </div>`;
+    playSound('splash');
+  }, ()=>showBumperCars());
+}
+
+// ===== ROLLER COASTER =====
+function showRollerCoaster(){
+  document.getElementById('park-areas-grid').innerHTML='';
+  const done = G.completedActivities.includes('coaster');
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="store-section">
+      <div class="section-title">🎢 Roller Coaster!</div>
+      <div class="intro-box" style="margin-bottom:10px;">
+        <p>🎢 The biggest ride in the park! Answer a <strong>math challenge</strong> to ride!</p>
+        ${done?'<p style="color:#2E7D32;font-weight:700;">✅ You already rode the roller coaster! Ride again?</p>':'<p>⭐ This is a required activity!</p>'}
+      </div>
+      <div style="text-align:center;margin:16px 0;">
+        <div style="font-size:5em;">🎢🎉🎢</div>
+      </div>
+      <div style="text-align:center;">
+        <button class="big-btn" onclick="doCoasterRide()">🎢 Ride the Coaster!</button>
+        <br><button class="btn-sm" onclick="buildPark()" style="margin-top:12px;">⬅️ Back to Park Map</button>
+      </div>
+    </div>`;
+}
+
+function doCoasterRide(){
+  G.gameTime+=1200; updateUI();
+  const q = rollerQs[Math.floor(Math.random()*rollerQs.length)];
+  showParkQuestion(q, ()=>{
+    if(!G.completedActivities.includes('coaster')) G.completedActivities.push('coaster');
+    const remaining=MANDATORY_RIDES.filter(r=>!G.completedActivities.includes(r));
+    const nameMap={fast:'Fast Slide',twisty:'Twisty Slide',drop:'Straight Drop',wave:'Wave Pool',raft:'Group Raft',bumper:'Bumper Cars',coaster:'Roller Coaster',pool_array:'Array of Fun in the Pool'};
+    document.getElementById('park-activity-area').innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:4em;">🎢🏆</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:var(--water);font-size:1.5em;">INCREDIBLE!</h3>
+        <p>You survived the biggest coaster in the park! You're a true thrill-seeker!</p>
+        <p style="font-size:0.95em;color:#666;margin:8px 0;">You still need to answer <strong>${G.parkQRequired - G.parkQAnswered}</strong> more question(s) before 8:00 PM!</p>
+        ${remaining.length>0?`<p style="color:#FF6B6B;font-size:0.9em;font-weight:700;">⭐ Still need: ${remaining.map(r=>nameMap[r]).join(', ')}</p>`:'<p style="color:#2E7D32;font-weight:700;">✅ All mandatory activities complete!</p>'}
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:14px;flex-wrap:wrap;">
+          <button class="big-btn" style="font-size:1em;padding:12px 24px;" onclick="doCoasterRide()">➡️ Next Question!</button>
+          <button class="btn-sm" onclick="showRollerCoaster()">🎢 Exit Coaster</button>
+          <button class="btn-sm" onclick="buildPark()">🗺️ Park Map</button>
+        </div>
+      </div>`;
+    playSound('win');
+  }, ()=>showRollerCoaster());
+}
+
+// ===== LAZY RIVER — PURE FUN, $5 FEE, NO QUESTIONS =====
+function startLazyRiver(){
+  if(G.money<5){ alert("You need $5 to ride the Lazy River! 💸"); showWaterArea(); return; }
+  stopParkTimer();
+  document.getElementById('park-areas-grid').innerHTML='';
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="store-section">
+      <div class="section-title">🛶 Lazy River — Just for Fun!</div>
+      <div class="intro-box" style="margin-bottom:10px;">
+        <p>💰 Entry fee: <strong>$5.00</strong> — No math questions, just a fun break!</p>
+        <p>🎮 <strong>How to play:</strong></p>
+        <p>🖱️ <strong>Mouse:</strong> Click anywhere on the river to steer your tube toward that spot!</p>
+        <p>⌨️ <strong>Arrow Keys:</strong> Press ← Left and → Right arrow keys to move your tube!</p>
+        <p>❤️ You have 3 lives. Hit 3 rocks and the ride ends!</p>
+        <p>🏆 Miss ALL rocks? Earn a <strong>LIFE LINE</strong> — 15 bonus minutes at the park!</p>
+      </div>
+      <div style="text-align:center;">
+        <button class="big-btn" onclick="payAndStartLazyRiver()">🛶 Pay $5 & Start!</button>
+        <button class="btn-sm" onclick="showWaterArea()" style="margin-left:12px;margin-top:8px;">← Back</button>
+      </div>
+    </div>`;
+}
+
+function payAndStartLazyRiver(){
+  G.money-=5; updateUI();
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="store-section">
+      <div class="section-title">🛶 Lazy River — 3 Phases of Fun!</div>
+      <div class="river-ui" style="flex-wrap:wrap;gap:6px;">
+        <span id="river-lives">❤️❤️❤️</span>
+        <span>🪨 Dodged: <span id="river-dodged">0</span></span>
+        <span>⭐ Stars: <span id="river-stars">0</span></span>
+      </div>
+      <canvas id="lazy-river-canvas" width="700" height="320" style="touch-action:none;"></canvas>
+      <p style="text-align:center;font-size:0.78em;color:#888;margin-top:4px;">Click/tap to steer • Arrow keys or WASD to move</p>
+      <div style="text-align:center;margin-top:6px;">
+        <button class="btn-sm" onclick="quitLazyRiver()">🚪 Leave River</button>
+      </div>
+    </div>`;
+  initLazyRiver();
+}
+
+function initLazyRiver(){
+  const canvas=document.getElementById('lazy-river-canvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  canvas.width=Math.min(700,window.innerWidth-30);
+  const W=canvas.width, H=320;
+  canvas.height=H;
+
+  const state={
+    tubeX:W/2, tubeY:H*0.72, tubeVX:0, tubeVY:0,
+    rocks:[], logs:[], whirlpools:[], stars:[],
+    lives:3, dodged:0, starsCollected:0,
+    progress:0, phase:1, // phases 1,2,3
+    hitRocks:0, running:true, won:false,
+    rockTimer:0, logTimer:0, whirlTimer:0, starTimer:0,
+    baseSpeed:1.4, currentDir:0, currentStrength:0, currentTimer:0,
+    bgOffset:0
+  };
+
+  // Phase thresholds
+  const PHASE2 = 34, PHASE3 = 67, DONE = 100;
+
+  function getPhaseLabel(){
+    if(state.progress<PHASE2) return '🌿 Gentle Waters';
+    if(state.progress<PHASE3) return '🌊 Rushing Rapids';
+    return '🌀 Wild Whirlpool Zone';
+  }
+
+  function spawnRock(){
+    const size = 12 + Math.random()*14 + (state.phase-1)*5;
+    state.rocks.push({x:Math.random()*(W-60)+30, y:-30, r:size,
+      vx:(Math.random()-0.5)*(state.phase*0.6), wobble:Math.random()*Math.PI*2});
+  }
+  function spawnLog(){
+    const side = Math.random()<0.5 ? -1 : 1;
+    const len = 60+Math.random()*60, thick=18;
+    state.logs.push({x: side<0?-len:W, y:Math.random()*(H*0.6)+40,
+      vx:side*(1.5+state.phase*0.5), len, thick});
+  }
+  function spawnWhirlpool(){
+    state.whirlpools.push({
+      x:Math.random()*(W-120)+60, y:Math.random()*(H*0.5)+60,
+      r:35+Math.random()*20, angle:0, life:220, maxLife:220,
+      spin: (Math.random()<0.5?1:-1) * (0.04+Math.random()*0.02)
+    });
+  }
+  function spawnStar(){
+    state.stars.push({x:Math.random()*(W-80)+40, y:-20, vy:1.5+Math.random(), pulse:0});
+  }
+
+  function drawBackground(){
+    // Gradient river water
+    const grad=ctx.createLinearGradient(0,0,0,H);
+    if(state.phase===1){grad.addColorStop(0,'#29B6F6');grad.addColorStop(1,'#0288D1');}
+    else if(state.phase===2){grad.addColorStop(0,'#0288D1');grad.addColorStop(1,'#01579B');}
+    else{grad.addColorStop(0,'#01579B');grad.addColorStop(1,'#002171');}
+    ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+
+    // Scrolling river banks
+    ctx.fillStyle='rgba(139,90,43,0.35)';
+    ctx.fillRect(0,0,18,H); ctx.fillRect(W-18,0,18,H);
+
+    // Animated water ripples
+    const t=Date.now()/1000;
+    ctx.strokeStyle='rgba(255,255,255,0.18)'; ctx.lineWidth=1.5;
+    for(let i=0;i<8;i++){
+      const yPos=((t*40+i*44)%H);
+      ctx.beginPath();
+      ctx.moveTo(20,yPos);
+      ctx.bezierCurveTo(W*0.25,yPos-12,W*0.75,yPos+12,W-20,yPos);
+      ctx.stroke();
+    }
+
+    // Current arrows in phase 2+
+    if(state.phase>=2){
+      ctx.fillStyle='rgba(255,255,255,0.12)';
+      for(let i=0;i<5;i++){
+        const ay=((t*60+i*60)%H);
+        const ax=W/2+(Math.sin(t+i)*80);
+        ctx.beginPath();
+        ctx.moveTo(ax,ay);ctx.lineTo(ax-8,ay+16);ctx.lineTo(ax+8,ay+16);
+        ctx.closePath(); ctx.fill();
+      }
+    }
+  }
+
+  function drawRocks(){
+    state.rocks.forEach(r=>{
+      r.wobble=(r.wobble+0.05)%(Math.PI*2);
+      const wobX=Math.sin(r.wobble)*3;
+      // Shadow
+      ctx.fillStyle='rgba(0,0,0,0.25)';
+      ctx.beginPath();ctx.ellipse(r.x+wobX+3,r.y+5,r.r+2,r.r*0.5,0,0,Math.PI*2);ctx.fill();
+      // Rock body
+      const rg=ctx.createRadialGradient(r.x+wobX-r.r*0.3,r.y-r.r*0.3,r.r*0.1,r.x+wobX,r.y,r.r);
+      rg.addColorStop(0,'#8D6E63'); rg.addColorStop(0.6,'#5D4037'); rg.addColorStop(1,'#3E2723');
+      ctx.fillStyle=rg;
+      ctx.beginPath();ctx.arc(r.x+wobX,r.y,r.r,0,Math.PI*2);ctx.fill();
+      // Highlight
+      ctx.fillStyle='rgba(255,255,255,0.2)';
+      ctx.beginPath();ctx.ellipse(r.x+wobX-r.r*0.3,r.y-r.r*0.3,r.r*0.35,r.r*0.22,Math.PI/4,0,Math.PI*2);ctx.fill();
+    });
+  }
+
+  function drawLogs(){
+    state.logs.forEach(l=>{
+      ctx.save();
+      ctx.translate(l.x+l.len/2, l.y);
+      // Log shadow
+      ctx.fillStyle='rgba(0,0,0,0.2)';
+      ctx.fillRect(-l.len/2+3,-(l.thick/2)+5,l.len,l.thick);
+      // Log body
+      const lg=ctx.createLinearGradient(-l.len/2,-l.thick/2,-l.len/2,l.thick/2);
+      lg.addColorStop(0,'#A1887F'); lg.addColorStop(0.4,'#795548'); lg.addColorStop(1,'#4E342E');
+      ctx.fillStyle=lg;
+      ctx.beginPath();ctx.roundRect(-l.len/2,-l.thick/2,l.len,l.thick,8);ctx.fill();
+      // Log rings
+      ctx.strokeStyle='rgba(62,27,14,0.4)'; ctx.lineWidth=2;
+      for(let i=-l.len/2+12;i<l.len/2-10;i+=22){
+        ctx.beginPath();ctx.moveTo(i,-l.thick/2);ctx.lineTo(i,l.thick/2);ctx.stroke();
+      }
+      ctx.restore();
+    });
+  }
+
+  function drawWhirlpools(){
+    state.whirlpools.forEach(w=>{
+      w.angle+=w.spin;
+      const alpha=Math.min(1, w.life/w.maxLife)*0.75;
+      // Outer glow
+      ctx.strokeStyle=`rgba(100,200,255,${alpha*0.3})`;
+      ctx.lineWidth=12;
+      ctx.beginPath();ctx.arc(w.x,w.y,w.r+8,0,Math.PI*2);ctx.stroke();
+      // Spiral rings
+      for(let ring=3;ring>0;ring--){
+        const rr=w.r*(ring/3);
+        ctx.strokeStyle=`rgba(100,220,255,${alpha*(ring/4)})`;
+        ctx.lineWidth=3;
+        ctx.beginPath();
+        ctx.arc(w.x,w.y,rr,w.angle,w.angle+Math.PI*1.7);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(w.x,w.y,rr*0.6,w.angle+Math.PI,w.angle+Math.PI*2.7);
+        ctx.stroke();
+      }
+      // Center
+      ctx.fillStyle=`rgba(0,150,255,${alpha})`;
+      ctx.beginPath();ctx.arc(w.x,w.y,8,0,Math.PI*2);ctx.fill();
+    });
+  }
+
+  function drawStars(){
+    state.stars.forEach(s=>{
+      s.pulse=(s.pulse+0.15)%(Math.PI*2);
+      const sc=0.9+Math.sin(s.pulse)*0.2;
+      ctx.save();
+      ctx.translate(s.x,s.y);ctx.scale(sc,sc);
+      // Glow
+      const sg=ctx.createRadialGradient(0,0,2,0,0,18);
+      sg.addColorStop(0,'rgba(255,255,100,0.9)');
+      sg.addColorStop(1,'rgba(255,200,0,0)');
+      ctx.fillStyle=sg;ctx.beginPath();ctx.arc(0,0,18,0,Math.PI*2);ctx.fill();
+      // Star shape
+      ctx.fillStyle='#FFD700';ctx.strokeStyle='#FF8F00';ctx.lineWidth=1.5;
+      ctx.beginPath();
+      for(let i=0;i<5;i++){
+        const outer=11,inner=5;
+        const ao=Math.PI/2+i*(Math.PI*2/5);
+        const ai=ao+Math.PI/5;
+        if(i===0) ctx.moveTo(Math.cos(ao)*outer,Math.sin(ao)*outer);
+        else ctx.lineTo(Math.cos(ao)*outer,Math.sin(ao)*outer);
+        ctx.lineTo(Math.cos(ai)*inner,Math.sin(ai)*inner);
+      }
+      ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.restore();
+    });
+  }
+
+  function drawTube(){
+    const tx=state.tubeX, ty=state.tubeY;
+    // Shadow
+    ctx.fillStyle='rgba(0,0,0,0.2)';
+    ctx.beginPath();ctx.ellipse(tx+4,ty+8,30,12,0,0,Math.PI*2);ctx.fill();
+    // Tube outer ring
+    const tg=ctx.createRadialGradient(tx-8,ty-5,4,tx,ty,30);
+    tg.addColorStop(0,'#FF8A65'); tg.addColorStop(0.6,'#FF5722'); tg.addColorStop(1,'#BF360C');
+    ctx.fillStyle=tg;
+    ctx.beginPath();ctx.ellipse(tx,ty,30,15,0,0,Math.PI*2);ctx.fill();
+    // Tube inner hole
+    ctx.fillStyle='#E0F7FA';
+    ctx.beginPath();ctx.ellipse(tx,ty,16,8,0,0,Math.PI*2);ctx.fill();
+    // Shine
+    ctx.fillStyle='rgba(255,255,255,0.35)';
+    ctx.beginPath();ctx.ellipse(tx-6,ty-4,10,4,Math.PI/5,0,Math.PI*2);ctx.fill();
+    // Person body
+    ctx.fillStyle='#FFCCBC';
+    ctx.beginPath();ctx.arc(tx,ty-15,10,0,Math.PI*2);ctx.fill();
+    // Person shirt
+    const shirt=['#E53935','#1E88E5','#43A047','#8E24AA'];
+    ctx.fillStyle=shirt[Math.floor(state.starsCollected)%shirt.length]||'#1E88E5';
+    ctx.beginPath();ctx.ellipse(tx,ty-5,9,6,0,0,Math.PI);ctx.fill();
+    // Arms
+    ctx.strokeStyle='#FFCCBC';ctx.lineWidth=5;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(tx-14,ty+2);ctx.lineTo(tx-24,ty-2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(tx+14,ty+2);ctx.lineTo(tx+24,ty-2);ctx.stroke();
+    // Face expression
+    ctx.fillStyle='#333';ctx.beginPath();ctx.arc(tx-3,ty-17,2,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(tx+3,ty-17,2,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#333';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.arc(tx,ty-13,3,0.2,Math.PI-0.2);ctx.stroke(); // smile
+  }
+
+  function drawHUD(){
+    // Phase banner
+    const phaseLabel=getPhaseLabel();
+    ctx.fillStyle='rgba(0,0,0,0.45)';
+    ctx.beginPath();ctx.roundRect(W/2-90,6,180,26,13);ctx.fill();
+    ctx.fillStyle='#FFD700';ctx.font='bold 13px Nunito,sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(phaseLabel,W/2,19);
+
+    // Lives
+    ctx.textAlign='left';ctx.font='bold 15px Nunito,sans-serif';
+    ctx.fillStyle='#FF6B6B';
+    ctx.fillText('❤️'.repeat(state.lives),10,H-10);
+    // Stars collected
+    ctx.textAlign='right';
+    ctx.fillStyle='#FFD700';
+    ctx.fillText(`⭐ ×${state.starsCollected}`,W-10,H-10);
+
+    // Progress bar
+    const pct=Math.min(state.progress/DONE,1);
+    ctx.fillStyle='rgba(0,0,0,0.35)';ctx.fillRect(10,H-32,W-20,12);
+    const barGrad=ctx.createLinearGradient(10,0,W-10,0);
+    barGrad.addColorStop(0,'#69F0AE');barGrad.addColorStop(0.5,'#00E5FF');barGrad.addColorStop(1,'#FFEA00');
+    ctx.fillStyle=barGrad;ctx.fillRect(10,H-32,(W-20)*pct,12);
+    // Phase markers
+    [PHASE2,PHASE3].forEach(p=>{
+      const mx=10+(W-20)*(p/DONE);
+      ctx.fillStyle='rgba(255,255,255,0.6)';ctx.fillRect(mx-1,H-34,2,16);
+    });
+    ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=1;ctx.strokeRect(10,H-32,W-20,12);
+
+    // Percent label
+    ctx.textAlign='center';ctx.fillStyle='white';ctx.font='bold 10px Nunito,sans-serif';
+    ctx.fillText(Math.round(state.progress)+'%',W/2,H-26);
+  }
+
+  function update(){
+    if(!state.running) return;
+    const t=Date.now()/1000;
+
+    // Advance progress — longer river now (slower advance)
+    state.progress+=0.055;
+    state.phase = state.progress<PHASE2?1 : state.progress<PHASE3?2 : 3;
+
+    // River current — pushes tube sideways
+    state.currentTimer++;
+    if(state.currentTimer>90){
+      state.currentDir=(Math.random()-0.5)*2;
+      state.currentStrength=0.3+state.phase*0.25;
+      state.currentTimer=0;
+    }
+    state.tubeVX+=state.currentDir*state.currentStrength*0.1;
+
+    // Whirlpool pull
+    state.whirlpools.forEach(w=>{
+      const dx=w.x-state.tubeX, dy=w.y-state.tubeY;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<w.r*2 && dist>1){
+        const pull=(w.r*1.8-dist)/(w.r*1.8)*0.45*(state.phase===3?1.4:1);
+        state.tubeVX+=dx/dist*pull;
+        state.tubeVY+=dy/dist*pull;
+      }
+    });
+
+    // Spawn obstacles
+    state.rockTimer++;
+    const rockRate=Math.max(28,90-state.progress*0.7-state.phase*15);
+    if(state.rockTimer>rockRate){ spawnRock(); state.rockTimer=0; }
+
+    state.logTimer++;
+    if(state.phase>=2 && state.logTimer>Math.max(55,120-state.progress)){ spawnLog(); state.logTimer=0; }
+
+    state.whirlTimer++;
+    if(state.phase>=2 && state.whirlTimer>180){ spawnWhirlpool(); state.whirlTimer=0; }
+
+    state.starTimer++;
+    if(state.starTimer>110){ spawnStar(); state.starTimer=0; }
+
+    // Move rocks
+    const spd=state.baseSpeed+state.phase*0.5+(state.progress/100)*1.2;
+    state.rocks.forEach(r=>{ r.y+=spd; r.x+=r.vx; if(r.x<30||r.x>W-30) r.vx*=-1; });
+    state.rocks=state.rocks.filter(r=>{
+      if(r.y>H+30){ state.dodged++; return false; }
+      return true;
+    });
+
+    // Move logs
+    state.logs.forEach(l=>{ l.x+=l.vx; });
+    state.logs=state.logs.filter(l=>l.x<W+l.len+10 && l.x>-l.len-10);
+
+    // Whirlpool lifetime
+    state.whirlpools.forEach(w=>w.life--);
+    state.whirlpools=state.whirlpools.filter(w=>w.life>0);
+
+    // Move stars down
+    state.stars.forEach(s=>s.y+=s.vy);
+    // Collect stars
+    state.stars=state.stars.filter(s=>{
+      if(s.y>H+20) return false;
+      const dx=s.x-state.tubeX, dy=s.y-state.tubeY;
+      if(Math.sqrt(dx*dx+dy*dy)<28){
+        state.starsCollected++;
+        playSound('correct');
+        return false;
+      }
+      return true;
+    });
+
+    // Tube physics
+    state.tubeVX*=0.88;
+    state.tubeVY*=0.88;
+    state.tubeX+=state.tubeVX;
+    state.tubeY+=state.tubeVY;
+    state.tubeX=Math.max(30,Math.min(W-30,state.tubeX));
+    state.tubeY=Math.max(30,Math.min(H-30,state.tubeY));
+
+    // Collision: rocks
+    for(let i=state.rocks.length-1;i>=0;i--){
+      const r=state.rocks[i];
+      const dx=r.x-state.tubeX, dy=r.y-state.tubeY;
+      if(Math.sqrt(dx*dx+dy*dy)<r.r+20){
+        state.lives--; state.hitRocks++;
+        // Bounce back
+        state.tubeVX=-dx/10; state.tubeVY=-dy/10;
+        state.rocks.splice(i,1);
+        playSound('wrong');
+        document.getElementById('river-lives').textContent='❤️'.repeat(Math.max(0,state.lives));
+        if(state.lives<=0){ state.running=false; endLazyRiver(false,state.hitRocks); }
+      }
+    }
+    // Collision: logs (wider hitbox)
+    state.logs.forEach(l=>{
+      const lx=l.x+l.len/2;
+      if(Math.abs(state.tubeX-lx)<l.len/2+20 && Math.abs(state.tubeY-l.y)<l.thick/2+20){
+        state.tubeVX-=l.vx*0.6; state.tubeVY+=2;
+      }
+    });
+
+    document.getElementById('river-dodged').textContent=state.dodged;
+    document.getElementById('river-stars').textContent=state.starsCollected;
+
+    if(state.progress>=DONE && state.running){
+      state.running=false; state.won=true;
+      endLazyRiver(true,state.hitRocks);
+    }
+  }
+
+  canvas.onclick=canvas.ontouchstart=function(e){
+    e.preventDefault();
+    const rect=canvas.getBoundingClientRect();
+    const scaleX=W/rect.width;
+    const src=e.touches?e.touches[0]:e;
+    const cx=(src.clientX-rect.left)*scaleX;
+    state.tubeVX+=(cx>state.tubeX?10:-10);
+  };
+  function onKey(e){
+    if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A') state.tubeVX-=12;
+    if(e.key==='ArrowRight'||e.key==='d'||e.key==='D') state.tubeVX+=12;
+    if(e.key==='ArrowUp'||e.key==='w'||e.key==='W') state.tubeVY-=8;
+    if(e.key==='ArrowDown'||e.key==='s'||e.key==='S') state.tubeVY+=8;
+  }
+  window.addEventListener('keydown',onKey);
+  window._lazyKeyHandler=onKey;
+  window._lazyState=state;
+
+  function loop(){
+    if(!document.getElementById('lazy-river-canvas')) return;
+    drawBackground();
+    drawStars();
+    drawWhirlpools();
+    drawLogs();
+    drawRocks();
+    drawTube();
+    drawHUD();
+    update();
+    if(state.running) requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+function endLazyRiver(won, hits){
+  stopMasterClock();
+  if(window._lazyKeyHandler){ window.removeEventListener('keydown',window._lazyKeyHandler); window._lazyKeyHandler=null; }
+  const area=document.getElementById('park-activity-area');
+  const starsGot = window._lazyState ? window._lazyState.starsCollected : 0;
+  // Apply star bonus: each star = 60s off the clock
+  if(starsGot>0) G.gameTime = Math.max(G.gameTime - starsGot*60, G.gameTime-600);
+
+  if(won && hits===0){
+    G.gameTime-=900; // 15 min bonus
+    area.innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:4em;">🏆🎉</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:#00C853;font-size:1.6em;">PERFECT RIDE!</h3>
+        <p style="font-size:1.1em;margin:8px 0;">You dodged every rock and made it through all 3 phases!</p>
+        <p style="color:var(--money);font-weight:700;">⏰ +15 bonus minutes! Stars bonus: +${starsGot} min!</p>
+        <p style="font-size:1em;">⭐ Stars collected: <strong>${starsGot}</strong> — Amazing floater!</p>
+        <br><button class="btn-sm" onclick="buildPark()">🗺️ Back to Park</button>
+        <button class="btn-sm" onclick="payAndStartLazyRiver()">🛶 Ride Again! ($5)</button>
+      </div>`;
+    playSound('win');
+  } else if(won){
+    area.innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:4em;">🛶✅</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:var(--water);font-size:1.5em;">You Finished!</h3>
+        <p>You made it through the whole river! Rocks hit: <strong>${hits}</strong></p>
+        <p>⭐ Stars collected: <strong>${starsGot}</strong>${starsGot>0?` — that's ${starsGot} bonus minutes!`:''}</p>
+        <p style="color:#888;font-size:0.9em;margin-top:6px;">Hit 0 rocks next time to earn the 15-minute bonus!</p>
+        <br><button class="btn-sm" onclick="buildPark()">🗺️ Back to Park</button>
+        <button class="btn-sm" onclick="payAndStartLazyRiver()">🛶 Ride Again! ($5)</button>
+      </div>`;
+    playSound('correct');
+  } else {
+    area.innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:4em;">🪨😅</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:#FF6B6B;font-size:1.5em;">Too Many Rocks!</h3>
+        <p>You hit 3 rocks and got knocked off your tube!</p>
+        <p>⭐ Stars collected: <strong>${starsGot}</strong>${starsGot>0?` — you still earned ${starsGot} bonus minute${starsGot===1?'':'s'}!`:''}</p>
+        <p style="color:#888;margin-top:6px;">The river gets trickier in Phase 2 and 3 — watch out for logs and whirlpools!</p>
+        <br><button class="btn-sm" onclick="buildPark()">🗺️ Back to Park</button>
+        <button class="btn-sm" onclick="payAndStartLazyRiver()">🛶 Try Again! ($5)</button>
+      </div>`;
+    playSound('wrong');
+  }
+  startMasterClock('park');
+}
+
+function quitLazyRiver(){
+  if(window._lazyState) window._lazyState.running=false;
+  if(window._lazyKeyHandler){ window.removeEventListener('keydown',window._lazyKeyHandler); window._lazyKeyHandler=null; }
+  buildPark(); startMasterClock('park');
+}
+
+// ===== FOOD AREA — 3 items × 20 questions each, chef miss logic =====
+const parkFoods=[
+  {name:'Ice Cream',emoji:'🍦',price:3.50},
+  {name:'Cotton Candy',emoji:'🍬',price:2.75},
+  {name:'Hot Dog',emoji:'🌭',price:4.99},
+  {name:'Fries',emoji:'🍟',price:3.25},
+  {name:'Hamburger',emoji:'🍔',price:6.99},
+  {name:'Pizza Slice',emoji:'🍕',price:4.50},
+  {name:'Chicken Fingers',emoji:'🍗',price:5.99},
+  {name:'Salad',emoji:'🥗',price:5.25},
+  {name:'Nachos',emoji:'🧀',price:4.75},
+  {name:'Lemonade',emoji:'🍋',price:2.50},
+];
+
+function showFoodArea(){
+  document.getElementById('park-areas-grid').innerHTML='';
+  const ordered = G.foodItemsOrdered||0;
+  let html=`<div class="store-section">
+    <div class="section-title">🍦 Waterfall Park Food Court</div>
+    <div style="background:#E3F2FD;border-radius:12px;padding:10px 14px;margin-bottom:12px;border-left:4px solid #1565C0;font-family:'Fredoka One',cursive;color:#0D47A1;">
+      🍽️ Food Items Ordered: <strong>${ordered}/3 required</strong> &nbsp;|&nbsp; Each item = 20 questions!
+      <br><span style="font-size:0.75em;font-family:'Nunito',sans-serif;">Pick any food item. Answer 20 questions correctly to receive it. Miss more than 2 on one item — the chef says it's sold out!</span>
+    </div>
+    <div class="food-menu">`;
+  parkFoods.forEach((f,i)=>{
+    html+=`<div class="food-item" onclick="selectFoodItem(${i})">
+      <div style="font-size:2.5em;">${f.emoji}</div>
+      <div style="font-weight:700;">${f.name}</div>
+      <div style="color:var(--money);font-family:'Fredoka One',cursive;">$${f.price.toFixed(2)}</div>
+    </div>`;
+  });
+  html+=`</div><div style="text-align:center;margin-top:10px;">
+    <button class="btn-sm" onclick="buildPark()">⬅️ Back to Park Map</button>
+  </div></div>`;
+  document.getElementById('park-activity-area').innerHTML=html;
+}
+
+function selectFoodItem(i){
+  const food = parkFoods[i];
+  if(G.money<food.price){ alert(`You don't have enough money for ${food.name}! 💸`); return; }
+  G.currentFoodItem = food;
+  G.foodQAnswered = 0;
+  G.foodMissesThisItem = 0;
+  // Build 20 money questions for this food item
+  // Build 20 unique money questions for this food item, cycling through all varieties
+  const shuffled = [...moneyQs].sort(()=>Math.random()-0.5);
+  G._foodQs = shuffled.slice(0, Math.min(20, shuffled.length));
+  // If pool has fewer than 20, pad with re-shuffled ones
+  if(G._foodQs.length < 20){
+    const extra = [...moneyQs].sort(()=>Math.random()-0.5);
+    while(G._foodQs.length < 20) G._foodQs.push(extra[G._foodQs.length % extra.length]);
+  }
+  showFoodQuestion();
+}
+
+function showFoodQuestion(){
+  const food = G.currentFoodItem;
+  const sess = G._foodQs;
+  if(G.foodQAnswered>=20){
+    // All 20 answered successfully!
+    G.money -= food.price;
+    G.foodItemsOrdered = (G.foodItemsOrdered||0)+1;
+    updateUI();
+    document.getElementById('park-activity-area').innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:4em;">${food.emoji}</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:var(--water);font-size:1.5em;">Yum! ${food.name}!</h3>
+        <p>You answered all 20 questions and earned your ${food.name}! So delicious!</p>
+        <p style="color:#2E7D32;font-weight:700;margin-top:8px;">Food items: ${G.foodItemsOrdered}/3 ✅</p>
+        ${G.foodItemsOrdered>=3?'<p style="color:#2E7D32;font-weight:700;">🎉 Food requirement complete!</p>':''}
+        <br>
+        ${G.foodItemsOrdered<3?`<button class="big-btn" style="font-size:1em;padding:12px 28px;" onclick="showFoodArea()">🍽️ Order Another Item!</button>`:''}
+        <button class="btn-sm" onclick="buildPark()" style="margin-top:10px;">🗺️ Park Map</button>
+      </div>`;
+    playSound('win');
+    startMasterClock('park');
+    return;
+  }
+  const q = sess[G.foodQAnswered];
+  let viz='';
+  if(q.display) viz=`<div style="font-size:1.8em;text-align:center;padding:10px;background:#FFFDF0;border-radius:10px;margin:10px 0;">${q.display}</div>`;
+  document.getElementById('park-areas-grid').innerHTML='';
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="question-card" style="border-top:5px solid #FF9800;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div class="question-type-badge badge-money">🍽️ Food Order: ${food.emoji} ${food.name}</div>
+        <button onclick="cancelFoodOrder()" style="background:#FFE0E0;border:2px solid #FF6B6B;color:#C0392B;border-radius:20px;padding:5px 14px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.85em;">🚪 Cancel Order</button>
+      </div>
+      <div style="background:#FFF3E0;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:0.85em;color:#E65100;">
+        💰 Food Question ${G.foodQAnswered+1} of 20 &nbsp;|&nbsp; Misses this item: <strong>${G.foodMissesThisItem}/2</strong> &nbsp;|&nbsp; Total Qs: ${G.parkQAnswered}/${G.parkQRequired}
+      </div>
+      <div class="tip-box">💡 <strong>Helpful Tip:</strong> ${q.tip}</div>
+      <div class="question-text">${q.question}</div>
+      ${viz}
+      <div class="choices-grid" id="food-q-choices">
+        ${q.choices.map(c=>`<button class="choice-btn" onclick="checkFoodAnswer(this,'${c}','${q.answer}')">${c}</button>`).join('')}
+      </div>
+      <div class="feedback-msg feedback-correct" id="food-fc">✅ Correct! Keep going — your food is almost ready!</div>
+      <div class="feedback-msg feedback-wrong" id="food-fw">❌ Oops! The chef is getting impatient! Try again!</div>
+    </div>`;
+}
+
+function checkFoodAnswer(btn, chosen, correct){
+  const isOk = chosen.toString()===correct.toString();
+  if(isOk){
+    btn.classList.add('correct');
+    document.querySelectorAll('#food-q-choices .choice-btn').forEach(b=>b.disabled=true);
+    document.getElementById('food-fc').style.display='block';
+    playSound('correct'); G.correctAnswers++; G.parkQAnswered++; G.foodQAnswered++;
+    updateUI();
+    setTimeout(showFoodQuestion, 1500);
+  } else {
+    btn.classList.add('wrong'); playSound('wrong');
+    G.foodMissesThisItem = (G.foodMissesThisItem||0)+1;
+    document.getElementById('food-fw').style.display='block';
+    setTimeout(()=>{
+      btn.classList.remove('wrong');
+      document.getElementById('food-fw').style.display='none';
+      if(G.foodMissesThisItem>=2){
+        // Chef sold out!
+        const food = G.currentFoodItem;
+        document.getElementById('park-activity-area').innerHTML=`
+          <div class="store-section" style="text-align:center;">
+            <div style="font-size:4em;">👨‍🍳😤</div>
+            <h3 style="font-family:'Fredoka One',cursive;color:#FF6B6B;font-size:1.4em;">Sorry! We're All Out!</h3>
+            <p>The chef says: <em>"We just ran out of ${food.emoji} ${food.name}! Too many wrong answers held up the line!"</em></p>
+            <p style="margin-top:10px;color:#666;">Don't worry — try a different food item or try this one again!</p>
+            <br>
+            <button class="big-btn" style="font-size:1em;padding:12px 28px;" onclick="showFoodArea()">🍽️ Back to Food Menu</button>
+          </div>`;
+        playSound('wrong');
+        startMasterClock('park');
+      }
+    }, 900);
+  }
+}
+
+function cancelFoodOrder(){
+  G.currentFoodItem=null; G.foodQAnswered=0; G.foodMissesThisItem=0;
+  startMasterClock('park');
+  showFoodArea();
+}
+
+// ===== ARCADE =====
+function showArcadeArea(){
+  document.getElementById('park-areas-grid').innerHTML='';
+  const tickets = G.tickets||0;
+  let html=`<div class="store-section">
+    <div class="section-title">🕹️ Arcade — Win Tickets!</div>
+    <div style="background:#F3E5F5;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-family:'Fredoka One',cursive;color:#6A1B9A;">
+      🎟️ Your Tickets: <strong>${tickets}</strong>
+      <br><span style="font-size:0.75em;font-family:'Nunito',sans-serif;color:#7B1FA2;">Play any game as many times as you like — earn 2 tickets each time you finish! Save up for big prizes! 🎁</span>
+    </div>
+    <p style="font-weight:700;color:#555;margin-bottom:12px;">Pick a game to play:</p>
+    <div class="food-menu">`;
+  arcadeGames.forEach(g=>{
+    html+=`<div class="food-item" onclick="startArcadeGame('${g.id}')">
+      <div style="font-size:2.5em;">${g.emoji}</div>
+      <div style="font-weight:700;">${g.name}</div>
+      <div style="color:#9C27B0;font-family:'Fredoka One',cursive;">+2 🎟️ each play</div>
+      <div style="font-size:0.75em;color:#888;">${g.desc}</div>
+    </div>`;
+  });
+  html+=`</div><div style="text-align:center;margin-top:12px;"><button class="btn-sm" onclick="buildPark()">⬅️ Back to Park Map</button></div></div>`;
+  document.getElementById('park-activity-area').innerHTML=html;
+}
+
+// ===== BALLOON POP ARRAY QUESTIONS (7s, 8s, 9s, 6s) =====
+const balloonPopQs = [
+  {answer:42,question:"The balloon wall has 6 rows with 7 balloons in each row. How many balloons total?",rows:6,cols:7},
+  {answer:56,question:"There are 8 rows of balloons with 7 in each row. How many balloons?",rows:8,cols:7},
+  {answer:63,question:"The booth has 9 rows of prizes with 7 prizes each. How many prizes?",rows:9,cols:7},
+  {answer:48,question:"6 rows of dart targets with 8 in each row. How many targets?",rows:6,cols:8},
+  {answer:64,question:"There are 8 rows of balloons with 8 balloons in each row. How many?",rows:8,cols:8},
+  {answer:72,question:"9 rows of game tickets with 8 tickets each. How many tickets?",rows:9,cols:8},
+  {answer:54,question:"6 rows of game cards with 9 cards in each row. How many cards?",rows:6,cols:9},
+  {answer:63,question:"7 rows of stickers with 9 stickers each. How many stickers?",rows:7,cols:9},
+  {answer:81,question:"The prize shelf has 9 rows with 9 prizes in each row. How many prizes?",rows:9,cols:9},
+  {answer:49,question:"7 rows of balloons with 7 in each row. How many balloons?",rows:7,cols:7},
+];
+
+function startArcadeGame(gameId){
+  const game = arcadeGames.find(g=>g.id===gameId);
+  if(!game) return;
+  if(gameId === 'balloon_pop'){ startBalloonPop(); return; }
+  if(gameId === 'laser_tag'){ startLaserTag(); return; }
+  // Other arcade games: standard money questions
+  const qs = [...moneyQs].sort(()=>Math.random()-0.5).slice(0,10);
+  G._arcadeSession = { gameId, qs, current:0, game };
+  showArcadeQuestion();
+}
+
+// ===== LASER TAG BLASTER GAME =====
+// Students aim and click/move their crosshair to shoot the right answer target
+const laserTagQs = [
+  // Array questions using 3s, 4s, 5s — accessible but requires thinking
+  {question:"3 rows × 4 columns = ?", answer:12, choices:[10,12,14,16]},
+  {question:"5 rows × 3 columns = ?", answer:15, choices:[12,13,15,18]},
+  {question:"4 rows × 5 columns = ?", answer:20, choices:[16,18,20,24]},
+  {question:"6 rows × 3 columns = ?", answer:18, choices:[15,17,18,21]},
+  {question:"2 rows × 9 columns = ?", answer:18, choices:[14,16,18,20]},
+  {question:"5 rows × 4 columns = ?", answer:20, choices:[16,18,20,22]},
+  {question:"3 rows × 7 columns = ?", answer:21, choices:[18,20,21,24]},
+  {question:"4 rows × 4 columns = ?", answer:16, choices:[12,14,16,20]},
+  {question:"6 rows × 4 columns = ?", answer:24, choices:[20,22,24,28]},
+  {question:"5 rows × 6 columns = ?", answer:30, choices:[25,28,30,35]},
+];
+
+let laserState = null;
+let laserRAF = null;
+
+function startLaserTag(){
+  G._arcadeSession = { gameId:'laser_tag', game: arcadeGames.find(g=>g.id==='laser_tag'), current:0 };
+  laserState = {
+    qs: [...laserTagQs].sort(()=>Math.random()-0.5),
+    current: 0, correct: 0
+  };
+  showLaserQuestion();
+}
+
+function showLaserQuestion(){
+  const ls = laserState;
+  if(!ls || ls.current >= ls.qs.length){ endLaserTag(); return; }
+  const q = ls.qs[ls.current];
+  const choices = [...q.choices].sort(()=>Math.random()-0.5);
+
+  document.getElementById('park-areas-grid').innerHTML='';
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="store-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="question-type-badge badge-array">🔫 Laser Tag Blaster — Q${ls.current+1}/10</div>
+        <button onclick="quitLaserTag()" style="background:#FFE0E0;border:2px solid #FF6B6B;color:#C0392B;border-radius:20px;padding:5px 14px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.85em;">🚪 Back Out</button>
+      </div>
+      <div style="background:#E8F5E9;border-radius:10px;padding:8px 12px;margin-bottom:10px;font-size:0.85em;color:#1B5E20;">
+        ✅ Correct: ${ls.correct} &nbsp;|&nbsp; Left: ${10-ls.current} &nbsp;|&nbsp; 🎟️ Tickets: ${G.tickets||0}
+      </div>
+      <div style="background:#1A237E;border-radius:14px;padding:14px;margin-bottom:10px;text-align:center;">
+        <p style="font-family:'Fredoka One',cursive;font-size:1.3em;color:#FFD700;margin-bottom:4px;">🎯 ${q.question}</p>
+        <p style="color:#90CAF9;font-size:0.85em;">Move your laser crosshair and CLICK the correct target!</p>
+      </div>
+      <canvas id="laser-canvas" width="680" height="320" style="display:block;margin:0 auto;border-radius:14px;cursor:none;max-width:100%;touch-action:none;"></canvas>
+      <p style="text-align:center;font-size:0.78em;color:#888;margin-top:4px;">Move mouse or finger over targets • Click or tap to fire!</p>
+    </div>`;
+
+  setTimeout(()=>initLaserCanvas(choices, q.answer, q), 50);
+}
+
+function initLaserCanvas(choices, correct, q){
+  const canvas = document.getElementById('laser-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = Math.min(680, window.innerWidth-30);
+  const W = canvas.width, H = 320;
+  canvas.height = H;
+
+  let mouseX = W/2, mouseY = H/2;
+  let laserBeam = null; // {x1,y1,x2,y2,life,hit}
+  let hitFlash = null;  // {x,y,correct,life}
+  let running = true;
+
+  // Target positions — 4 targets spread across arena
+  const N = choices.length;
+  const targets = choices.map((val,i)=>({
+    val, isCorrect: String(val)===String(correct),
+    x: (W/N)*i + (W/N)/2,
+    y: 140 + (i%2===0?-30:30),
+    r: 42,
+    hit: false,
+    pulse: i*0.8
+  }));
+
+  // Crate colors for targets
+  const targetColors = ['#D32F2F','#1565C0','#2E7D32','#F57F17'];
+
+  function drawArena(){
+    // Dark arena background
+    ctx.fillStyle='#0D1B2A'; ctx.fillRect(0,0,W,H);
+    // Grid lines (floor perspective)
+    ctx.strokeStyle='rgba(0,200,255,0.08)'; ctx.lineWidth=1;
+    for(let x=0;x<W;x+=40){ ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke(); }
+    for(let y=0;y<H;y+=40){ ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke(); }
+    // Ceiling lights
+    const t=Date.now()/1000;
+    [W*0.2,W*0.5,W*0.8].forEach((lx,i)=>{
+      const pulse=0.5+0.5*Math.sin(t*2+i);
+      ctx.fillStyle=`rgba(0,200,255,${0.15*pulse})`;
+      ctx.beginPath();ctx.ellipse(lx,0,30,15,0,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle=`rgba(0,200,255,${0.3*pulse})`;ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(lx,0);ctx.lineTo(lx,40);ctx.stroke();
+    });
+  }
+
+  function drawTargets(){
+    targets.forEach((tgt,i)=>{
+      if(tgt.hit) return;
+      tgt.pulse+=0.03;
+      const wobble=Math.sin(tgt.pulse)*4;
+      const tx=tgt.x, ty=tgt.y+wobble;
+
+      // Crate/box base
+      ctx.fillStyle=targetColors[i%targetColors.length];
+      ctx.beginPath();ctx.roundRect(tx-tgt.r,ty-tgt.r,tgt.r*2,tgt.r*2,8);ctx.fill();
+      // Lighter top face
+      ctx.fillStyle='rgba(255,255,255,0.15)';
+      ctx.beginPath();ctx.roundRect(tx-tgt.r+3,ty-tgt.r+3,tgt.r*2-6,tgt.r-4,6);ctx.fill();
+      // Target bullseye rings
+      [tgt.r*0.75,tgt.r*0.5,tgt.r*0.28].forEach((ringR,ri)=>{
+        ctx.strokeStyle=ri%2===0?'rgba(255,255,255,0.7)':'rgba(255,200,0,0.7)';
+        ctx.lineWidth=2;
+        ctx.beginPath();ctx.arc(tx,ty,ringR,0,Math.PI*2);ctx.stroke();
+      });
+      // Number answer in center
+      ctx.fillStyle='#FFFFFF';
+      ctx.font=`bold 24px Arial,sans-serif`;
+      ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.shadowColor='rgba(0,0,0,0.8)';ctx.shadowBlur=6;
+      ctx.fillText(String(tgt.val),tx,ty);
+      ctx.shadowBlur=0;
+    });
+  }
+
+  function drawLaserBeam(){
+    if(!laserBeam || laserBeam.life<=0) return;
+    laserBeam.life--;
+    const alpha=laserBeam.life/15;
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    // Glow
+    ctx.shadowColor=laserBeam.hit?'#FF4444':'#FF0000';
+    ctx.shadowBlur=12;
+    ctx.strokeStyle=laserBeam.hit?'#FF8888':'#FF3300';
+    ctx.lineWidth=4;
+    ctx.beginPath();
+    ctx.moveTo(laserBeam.x1,laserBeam.y1);
+    ctx.lineTo(laserBeam.x2,laserBeam.y2);
+    ctx.stroke();
+    // Thin bright center
+    ctx.strokeStyle='#FFAAAA';ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(laserBeam.x1,laserBeam.y1);
+    ctx.lineTo(laserBeam.x2,laserBeam.y2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawHitFlash(){
+    if(!hitFlash || hitFlash.life<=0) return;
+    hitFlash.life--;
+    const alpha=hitFlash.life/20;
+    const size=(1-hitFlash.life/20)*60+20;
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    ctx.fillStyle=hitFlash.correct?'#4CAF50':'#FF5252';
+    ctx.beginPath();ctx.arc(hitFlash.x,hitFlash.y,size,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='white';
+    ctx.font=`bold ${hitFlash.correct?28:24}px Arial`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(hitFlash.correct?'✓':'✗',hitFlash.x,hitFlash.y);
+    ctx.restore();
+  }
+
+  function drawCrosshair(){
+    const cx=mouseX, cy=mouseY;
+    ctx.save();
+    ctx.strokeStyle='#00FF00';ctx.lineWidth=2;
+    ctx.shadowColor='#00FF00';ctx.shadowBlur=8;
+    // Outer ring
+    ctx.beginPath();ctx.arc(cx,cy,18,0,Math.PI*2);ctx.stroke();
+    // Cross lines with gap
+    [[cx-28,cy,cx-20,cy],[cx+20,cy,cx+28,cy],[cx,cy-28,cx,cy-20],[cx,cy+20,cx,cy+28]].forEach(([x1,y1,x2,y2])=>{
+      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    });
+    // Inner dot
+    ctx.fillStyle='rgba(0,255,0,0.8)';
+    ctx.beginPath();ctx.arc(cx,cy,3,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+
+  function fire(fx,fy){
+    if(!running) return;
+    // Gun position (bottom center)
+    const gx=W/2, gy=H-10;
+    laserBeam={x1:gx,y1:gy,x2:fx,y2:fy,life:15,hit:false};
+    // Check hit
+    const hit=targets.find(t=>{
+      if(t.hit) return false;
+      const by=t.y+Math.sin(t.pulse)*4;
+      return Math.hypot(fx-t.x,fy-by)<t.r;
+    });
+    if(hit){
+      laserBeam.hit=true;
+      hit.hit=true;
+      hitFlash={x:hit.x,y:hit.y,correct:hit.isCorrect,life:20};
+      if(hit.isCorrect){
+        playSound('correct');
+        laserState.correct++;
+        G.parkQAnswered++;G.correctAnswers++;
+        updateUI();
+        running=false;
+        setTimeout(()=>{
+          cancelAnimationFrame(laserRAF);
+          laserState.current++;
+          const overlay=document.createElement('div');
+          overlay.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2E7D32;color:white;font-family:Fredoka One,cursive;font-size:2em;padding:18px 36px;border-radius:20px;z-index:9999;pointer-events:none;text-align:center;';
+          overlay.textContent=`🔫 TARGET HIT! ${laserState.correct}/10`;
+          document.body.appendChild(overlay);
+          setTimeout(()=>{overlay.remove();showLaserQuestion();},900);
+        },300);
+      } else {
+        playSound('wrong');
+        const overlay=document.createElement('div');
+        overlay.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#C62828;color:white;font-family:Fredoka One,cursive;font-size:1.4em;padding:14px 28px;border-radius:16px;z-index:9999;pointer-events:none;';
+        overlay.textContent='❌ Wrong target! Keep aiming!';
+        document.body.appendChild(overlay);
+        setTimeout(()=>overlay.remove(),1000);
+      }
+    }
+  }
+
+  function loop(){
+    if(!document.getElementById('laser-canvas')){cancelAnimationFrame(laserRAF);return;}
+    drawArena();
+    drawTargets();
+    drawLaserBeam();
+    drawHitFlash();
+    drawCrosshair();
+    if(running) laserRAF=requestAnimationFrame(loop);
+  }
+
+  canvas.onmousemove=e=>{
+    const r=canvas.getBoundingClientRect();
+    mouseX=(e.clientX-r.left)*(W/r.width);
+    mouseY=(e.clientY-r.top)*(H/r.height);
+  };
+  canvas.ontouchmove=e=>{
+    e.preventDefault();
+    const r=canvas.getBoundingClientRect();
+    mouseX=(e.touches[0].clientX-r.left)*(W/r.width);
+    mouseY=(e.touches[0].clientY-r.top)*(H/r.height);
+  };
+  canvas.onclick=e=>{
+    const r=canvas.getBoundingClientRect();
+    fire((e.clientX-r.left)*(W/r.width),(e.clientY-r.top)*(H/r.height));
+  };
+  canvas.ontouchend=e=>{
+    e.preventDefault();
+    const r=canvas.getBoundingClientRect();
+    fire((e.changedTouches[0].clientX-r.left)*(W/r.width),(e.changedTouches[0].clientY-r.top)*(H/r.height));
+  };
+
+  laserRAF=requestAnimationFrame(loop);
+}
+
+function endLaserTag(){
+  const ls=laserState;
+  if(!ls) return;
+  cancelAnimationFrame(laserRAF);
+  // Always award tickets — students can replay any game
+  G.arcadeGamesCompleted=(G.arcadeGamesCompleted||0)+1;
+  G.tickets=(G.tickets||0)+2;
+  updateUI();
+  document.getElementById('park-areas-grid').innerHTML='';
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="store-section" style="text-align:center;">
+      <div style="font-size:4em;">🔫🏆</div>
+      <h3 style="font-family:'Fredoka One',cursive;color:var(--purple);font-size:1.5em;">Laser Tag Complete!</h3>
+      <p style="font-size:1.1em;margin:10px 0;">You zapped <strong>${ls.correct} out of 10</strong> targets!</p>
+      <p style="color:#9C27B0;font-family:'Fredoka One',cursive;font-size:1.2em;">+2 Tickets! 🎟️🎟️ Total: ${G.tickets}</p>
+      ${((G.tickets||0)+2)>=2?'<p style="color:#2E7D32;font-weight:700;margin-top:8px;">🎁 You have 2+ tickets — the Gift Shop is now open!</p>':''}
+      <br>
+      <button class="btn-sm" onclick="showArcadeArea()">🕹️ Play Another Game</button>
+      <button class="btn-sm" onclick="buildPark()">🗺️ Park Map</button>
+    </div>`;
+  playSound('win');
+  laserState=null;
+}
+
+function quitLaserTag(){
+  cancelAnimationFrame(laserRAF);
+  laserState=null;
+  G._arcadeSession=null;
+  showArcadeArea();
+}
+
+// ===== BALLOON POP GAME =====
+let balloonPopState = null;
+let balloonRAF = null;
+
+function startBalloonPop(){
+  G._arcadeSession = { gameId:'balloon_pop', game: arcadeGames.find(g=>g.id==='balloon_pop'), current:0 };
+  balloonPopState = {
+    qs: [...balloonPopQs].sort(()=>Math.random()-0.5),
+    current: 0,
+    correct: 0,
+    popped: [],
+    balloons: [],
+    running: false,
+    showingQ: true
+  };
+  showBalloonQuestion();
+}
+
+function showBalloonQuestion(){
+  const state = balloonPopState;
+  if(!state || state.current >= state.qs.length){
+    endBalloonPop();
+    return;
+  }
+  const q = state.qs[state.current];
+  state.running = false;
+  state.showingQ = true;
+
+  // Build 4 answer choices: correct + 3 wrong
+  const correct = q.answer;
+  const wrongs = new Set();
+  while(wrongs.size < 3){
+    const offset = (Math.floor(Math.random()*12)-6) * (q.rows < 7 ? 3 : 1);
+    const w = correct + offset;
+    if(w !== correct && w > 0 && w < 100) wrongs.add(w);
+  }
+  const choices = [correct, ...wrongs].sort(()=>Math.random()-0.5);
+
+  // Build array visual dots for the question
+  let dotsHtml = '<div class="array-visual" style="margin:8px auto;display:inline-block;">';
+  for(let r=0;r<q.rows;r++){
+    dotsHtml += '<div class="array-row">';
+    for(let c=0;c<q.cols;c++) dotsHtml += '<div class="array-dot" style="width:22px;height:22px;background:linear-gradient(135deg,#FF6B6B,#FF8E53);border-color:#C0392B;"></div>';
+    dotsHtml += '</div>';
+  }
+  dotsHtml += `<div style="font-size:0.8em;color:#555;margin-top:6px;">📐 ${q.rows} rows × ${q.cols} columns — Count ALL dots!</div></div>`;
+
+  document.getElementById('park-areas-grid').innerHTML='';
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="store-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="question-type-badge badge-array">🎈 Balloon Pop — Q ${state.current+1}/10</div>
+        <button onclick="quitBalloonPop()" style="background:#FFE0E0;border:2px solid #FF6B6B;color:#C0392B;border-radius:20px;padding:5px 14px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.85em;">🚪 Back Out</button>
+      </div>
+      <div style="background:#E8F5E9;border-radius:12px;padding:8px 12px;margin-bottom:10px;font-size:0.85em;color:#1B5E20;">
+        ✅ Correct: ${state.correct} &nbsp;|&nbsp; Questions left: ${10-state.current} &nbsp;|&nbsp; 🎟️ Tickets: ${G.tickets||0}
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Count every dot carefully — or skip count by the number in each row. How many rows do you see?</div>
+      <div class="question-text" style="text-align:center;">${q.question}</div>
+      <div style="text-align:center;margin:8px 0;">${dotsHtml}</div>
+      <p style="text-align:center;font-family:'Fredoka One',cursive;font-size:1.1em;color:#9C27B0;margin:10px 0;">🎈 POP the balloon with the RIGHT answer!</p>
+      <canvas id="balloon-canvas" width="680" height="300" style="display:block;margin:0 auto;border-radius:16px;cursor:crosshair;max-width:100%;touch-action:none;"></canvas>
+      <p style="text-align:center;font-size:0.78em;color:#888;margin-top:4px;">Click or tap the correct balloon to pop it!</p>
+    </div>`;
+
+  // Draw balloons after canvas is in DOM
+  setTimeout(()=>drawBalloons(choices, correct, q), 50);
+}
+
+function drawBalloons(choices, correct, q){
+  const canvas = document.getElementById('balloon-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = Math.min(680, window.innerWidth-30);
+  const W = canvas.width, H = 300;
+  canvas.height = H;
+  const state = balloonPopState;
+
+  // Balloon colors — solid hex for reliable rendering
+  const colors = [
+    {body:'#E53935', shine:'#FFCDD2', string:'#B71C1C'},
+    {body:'#7B1FA2', shine:'#E1BEE7', string:'#4A148C'},
+    {body:'#0288D1', shine:'#B3E5FC', string:'#01579B'},
+    {body:'#F57F17', shine:'#FFF9C4', string:'#E65100'}
+  ];
+
+  // Spread 4 balloons evenly across canvas
+  const N = choices.length;
+  const balloons = choices.map((val, i) => ({
+    val,
+    x: (W / N) * i + (W / N) / 2,
+    y: 100,
+    r: 46,
+    color: colors[i % colors.length],
+    popped: false,
+    wobble: i * 1.1,
+    bobSpeed: 0.025 + i * 0.005,
+    isCorrect: String(val) === String(correct)
+  }));
+
+  state.balloons = balloons;
+  state.running = true;
+  state.showingQ = false;
+
+  function drawBalloon(b){
+    if(b.popped) return;
+    b.wobble += b.bobSpeed;
+    const by = b.y + Math.sin(b.wobble) * 10;
+    const bx = b.x;
+    const r = b.r;
+
+    // String from bottom of balloon to bottom of canvas
+    ctx.save();
+    ctx.strokeStyle = b.color.string;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(bx, by + r + 8);
+    ctx.quadraticCurveTo(bx - 12, by + r + 50, bx + 8, H - 10);
+    ctx.stroke();
+    ctx.restore();
+
+    // Balloon oval body
+    ctx.save();
+    const grad = ctx.createRadialGradient(bx - r*0.3, by - r*0.3, r*0.05, bx, by, r);
+    grad.addColorStop(0, b.color.shine);
+    grad.addColorStop(0.45, b.color.body);
+    grad.addColorStop(1, b.color.string);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.ellipse(bx, by, r, r * 1.15, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Shine highlight top-left
+    ctx.save();
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.beginPath();
+    ctx.ellipse(bx - r*0.28, by - r*0.32, r*0.28, r*0.18, -Math.PI/5, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+
+    // Knot at bottom
+    ctx.save();
+    ctx.fillStyle = b.color.string;
+    ctx.beginPath();
+    ctx.ellipse(bx, by + r * 1.15, 5, 8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Answer number — big, bold, white with dark shadow
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const numStr = String(b.val);
+    const fontSize = numStr.length > 2 ? 20 : 26;
+    ctx.font = `bold ${fontSize}px Arial, sans-serif`;
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fillText(numStr, bx + 2, by + 2);
+    // White text
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText(numStr, bx, by);
+    ctx.restore();
+  }
+
+  function drawPopBurst(b, progress){
+    const numPieces = 10;
+    for(let i = 0; i < numPieces; i++){
+      const angle = (i / numPieces) * Math.PI * 2;
+      const dist = progress * 70;
+      const px = b.x + Math.cos(angle) * dist;
+      const py = b.y + Math.sin(angle) * dist;
+      const alpha = Math.max(0, 1 - progress);
+      const size = Math.max(1, 9 * (1 - progress * 0.6));
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = b.color.body;
+      ctx.beginPath();
+      ctx.arc(px, py, size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  let popAnimations = [];
+
+  function loop(){
+    if(!document.getElementById('balloon-canvas')){
+      cancelAnimationFrame(balloonRAF);
+      return;
+    }
+    // Background
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#1A237E');
+    bg.addColorStop(1, '#283593');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Subtle twinkle dots
+    const t = Date.now() / 1000;
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    for(let s = 0; s < 12; s++){
+      const sx = ((Math.sin(s * 137.5) * 0.5 + 0.5)) * W;
+      const sy = ((Math.cos(s * 97.3) * 0.5 + 0.5)) * H * 0.8;
+      const pulse = Math.abs(Math.sin(t * 1.5 + s));
+      ctx.globalAlpha = pulse * 0.6;
+      ctx.beginPath();
+      ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+
+    // Draw all balloons
+    balloons.forEach(b => drawBalloon(b));
+
+    // Pop burst animations
+    popAnimations = popAnimations.filter(a => {
+      a.progress += 0.06;
+      drawPopBurst(a.b, a.progress);
+      return a.progress < 1;
+    });
+
+    if(state.running) balloonRAF = requestAnimationFrame(loop);
+  }
+
+  function getBalloonHit(clientX, clientY){
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = W / rect.width;
+    const scaleY = H / rect.height;
+    const cx = (clientX - rect.left) * scaleX;
+    const cy = (clientY - rect.top) * scaleY;
+    return balloons.find(b => {
+      if(b.popped) return false;
+      const by = b.y + Math.sin(b.wobble) * 10;
+      const dx = cx - b.x;
+      const dy = cy - by;
+      // Check within ellipse
+      return (dx*dx)/(b.r*b.r) + (dy*dy)/((b.r*1.15)*(b.r*1.15)) < 1.3;
+    });
+  }
+
+  function onTap(e){
+    e.preventDefault();
+    if(!state.running) return;
+    const src = e.touches ? e.touches[0] : e;
+    const hit = getBalloonHit(src.clientX, src.clientY);
+    if(!hit) return;
+
+    hit.popped = true;
+    popAnimations.push({ b: { x:hit.x, y:hit.y, color:hit.color }, progress: 0 });
+
+    if(hit.isCorrect){
+      playSound('correct');
+      state.correct++;
+      G.parkQAnswered++;
+      G.correctAnswers++;
+      updateUI();
+      state.running = false;
+      setTimeout(()=>{
+        cancelAnimationFrame(balloonRAF);
+        state.current++;
+        // Brief "Correct!" overlay
+        const overlay = document.createElement('div');
+        overlay.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#2E7D32;color:white;font-family:Fredoka One,cursive;font-size:2em;padding:18px 36px;border-radius:20px;z-index:9999;text-align:center;pointer-events:none;';
+        overlay.textContent = `🎈 POP! Correct! ${state.correct}/10`;
+        document.body.appendChild(overlay);
+        setTimeout(()=>{ overlay.remove(); showBalloonQuestion(); }, 900);
+      }, 200);
+    } else {
+      playSound('wrong');
+      const overlay = document.createElement('div');
+      overlay.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#C62828;color:white;font-family:Fredoka One,cursive;font-size:1.4em;padding:14px 28px;border-radius:16px;z-index:9999;text-align:center;pointer-events:none;';
+      overlay.textContent = '❌ Wrong balloon! Try again!';
+      document.body.appendChild(overlay);
+      setTimeout(()=>{ overlay.remove(); }, 1100);
+    }
+  }
+
+  canvas.onclick = onTap;
+  canvas.ontouchstart = onTap;
+  balloonRAF = requestAnimationFrame(loop);
+}
+
+function endBalloonPop(){
+  const state = balloonPopState;
+  if(!state) return;
+  cancelAnimationFrame(balloonRAF);
+  // Always award tickets — students can replay any game
+  G.arcadeGamesCompleted = (G.arcadeGamesCompleted||0)+1;
+  G.tickets = (G.tickets||0)+2;
+  updateUI();
+  document.getElementById('park-areas-grid').innerHTML='';
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="store-section" style="text-align:center;">
+      <div style="font-size:4em;">🎈🏆</div>
+      <h3 style="font-family:'Fredoka One',cursive;color:var(--purple);font-size:1.5em;">Balloon Pop Complete!</h3>
+      <p style="font-size:1.1em;margin:10px 0;">You popped <strong>${state.correct} out of 10</strong> correct balloons!</p>
+      <p style="color:#9C27B0;font-family:'Fredoka One',cursive;font-size:1.2em;">+2 Tickets! 🎟️🎟️ Total: ${G.tickets}</p>
+      ${((G.tickets||0)+2)>=2?'<p style="color:#2E7D32;font-weight:700;margin-top:8px;">🎁 You have 2+ tickets — the Gift Shop is now open!</p>':''}
+      <br>
+      <button class="btn-sm" onclick="showArcadeArea()">🕹️ Play Another Game</button>
+      <button class="btn-sm" onclick="buildPark()">🗺️ Park Map</button>
+    </div>`;
+  playSound('win');
+  balloonPopState = null;
+}
+
+function quitBalloonPop(){
+  cancelAnimationFrame(balloonRAF);
+  balloonPopState = null;
+  G._arcadeSession = null;
+  showArcadeArea();
+}
+
+function showArcadeQuestion(){
+  const sess = G._arcadeSession;
+  if(!sess) return;
+  if(sess.current>=sess.qs.length){
+    // Completed all 10!
+    // Always award tickets — students can replay any game
+    G.arcadeGamesCompleted = (G.arcadeGamesCompleted||0)+1;
+    G.tickets = (G.tickets||0)+2;
+    const tracker=document.getElementById('park-q-tracker');
+    if(tracker) tracker.textContent=`📋 Park Questions: ${G.parkQAnswered} / ${G.parkQRequired} answered | 🎟️ Tickets: ${G.tickets||0}`;
+    document.getElementById('park-areas-grid').innerHTML='';
+    document.getElementById('park-activity-area').innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:4em;">${sess.game.emoji}</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:var(--purple);font-size:1.5em;">${sess.game.name} — Complete!</h3>
+        <p style="font-size:1.1em;margin:10px 0;">You answered all 10 questions! You earned <strong>2 tickets</strong>! 🎟️🎟️</p>
+        <p style="color:#9C27B0;font-family:'Fredoka One',cursive;font-size:1.3em;">Total Tickets: ${G.tickets}</p>
+        ${((G.tickets||0)+2)>=2?'<p style="color:#2E7D32;font-weight:700;">🎁 You have 2+ tickets — the Gift Shop is now open!</p>':''}
+        <br><button class="btn-sm" onclick="showArcadeArea()">🕹️ Play Another Game</button>
+        <button class="btn-sm" onclick="buildPark()">🗺️ Park Map</button>
+      </div>`;
+    playSound('win');
+    // Clock was never stopped — continues running
+    return;
+  }
+  const q = sess.qs[sess.current];
+  // Clock keeps running during arcade questions
+  let viz='';
+  if(q.type==='money'&&q.display){
+    viz=`<div style="font-size:1.8em;text-align:center;padding:10px;background:#FFFDF0;border-radius:10px;margin:10px 0;">${q.display}</div>`;
+  }
+  document.getElementById('park-areas-grid').innerHTML='';
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="question-card" style="border-top-color:#9C27B0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div class="question-type-badge" style="background:#F3E5F5;color:#6A1B9A;">🕹️ ${sess.game.name}</div>
+        <button onclick="backOutOfArcadeQ()" style="background:#FFE0E0;border:2px solid #FF6B6B;color:#C0392B;border-radius:20px;padding:5px 14px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.85em;">🚪 Back Out</button>
+      </div>
+      <div style="font-size:0.8em;color:#888;margin-bottom:6px;">Arcade Question ${sess.current+1} of 10 &nbsp;|&nbsp; 🎟️ Tickets: ${G.tickets||0}</div>
+      <div class="tip-box">💡 <strong>Helpful Tip:</strong> ${q.tip}</div>
+      <div class="question-text">${q.question}</div>
+      ${viz}
+      <div class="choices-grid" id="arcade-q-choices">
+        ${q.choices.map(c=>`<button class="choice-btn" onclick="checkArcadeAnswer(this,'${c}','${q.answer}')">${c}</button>`).join('')}
+      </div>
+      <div class="feedback-msg feedback-correct" id="arcade-fc">✅ Correct! Keep going!</div>
+      <div class="feedback-msg feedback-wrong" id="arcade-fw">❌ Not quite! Try again!</div>
+    </div>`;
+}
+
+function backOutOfArcadeQ(){
+  G._arcadeSession=null;
+  showArcadeArea();
+}
+
+function checkArcadeAnswer(btn,chosen,correct){
+  const isOk=chosen.toString()===correct.toString();
+  if(isOk){
+    btn.classList.add('correct');
+    document.querySelectorAll('#arcade-q-choices .choice-btn').forEach(b=>b.disabled=true);
+    document.getElementById('arcade-fc').style.display='block';
+    playSound('correct'); G.correctAnswers++;
+    G.parkQAnswered++; // counts toward 160 total
+    updateUI();
+    const tracker=document.getElementById('park-q-tracker');
+    if(tracker) tracker.textContent=`📋 Questions: ${G.parkQAnswered}/${G.parkQRequired} | 🎟️ Tickets: ${G.tickets||0}`;
+    G._arcadeSession.current++;
+    setTimeout(showArcadeQuestion,1500);
+  } else {
+    btn.classList.add('wrong'); playSound('wrong');
+    document.getElementById('arcade-fw').style.display='block';
+    setTimeout(()=>{
+      btn.classList.remove('wrong');
+      document.getElementById('arcade-fw').style.display='none';
+    },900);
+  }
+}
+
+// ===== GIFT SHOP =====
+function showGiftShop(){
+  const tickets = G.tickets||0;
+  const canEnter = tickets>=2 || G.money>=20;
+  if(!canEnter){
+    document.getElementById('park-areas-grid').innerHTML='';
+    document.getElementById('park-activity-area').innerHTML=`
+      <div class="store-section" style="text-align:center;">
+        <div style="font-size:3.5em;">🎁🔒</div>
+        <h3 style="font-family:'Fredoka One',cursive;color:#9C27B0;font-size:1.4em;">Gift Shop Locked!</h3>
+        <p style="margin:10px 0;">You need <strong>at least 2 tickets</strong> OR <strong>$20.00</strong> to enter the Gift Shop.</p>
+        <p style="color:#666;">You have: <strong>${tickets} tickets</strong> and <strong>$${G.money.toFixed(2)}</strong> cash.</p>
+        <p style="margin-top:10px;color:#9C27B0;">Play arcade games to earn tickets! Each completed game = 2 tickets! 🕹️</p>
+        <br><button class="btn-sm" onclick="buildPark()">⬅️ Back to Park Map</button>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('park-areas-grid').innerHTML='';
+  const tiers=[
+    {label:'⭐ Small Prizes (5–11 tickets  |  $1–$5)',items:giftPrizes.slice(0,11)},
+    {label:'🌟 Medium Prizes (15–30 tickets  |  $6–$20)',items:giftPrizes.slice(11,23)},
+    {label:'🏆 Big Prizes (45–100 tickets  |  $30–$80)',items:giftPrizes.slice(23)},
+  ];
+
+  let html=`<div class="store-section">
+    <div class="section-title">🎁 Gift Shop</div>
+    <div style="background:#FFF9C4;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-family:'Fredoka One',cursive;color:#F57F17;">
+      🎟️ Tickets: <strong>${tickets}</strong> &nbsp;|&nbsp; 💰 Cash: <strong>$${G.money.toFixed(2)}</strong>
+      <br><span style="font-size:0.75em;font-family:'Nunito',sans-serif;">Click any item to choose how you want to pay!</span>
+    </div>`;
+
+  tiers.forEach(tier=>{
+    html+=`<div style="font-family:'Fredoka One',cursive;font-size:0.95em;color:#6A1B9A;margin:14px 0 8px;">${tier.label}</div><div class="food-menu">`;
+    tier.items.forEach(p=>{
+      const globalIdx=giftPrizes.indexOf(p);
+      const canTickets=tickets>=p.tickets;
+      const canCash=G.money>=p.price;
+      html+=`<div class="food-item" onclick="showPurchaseChoice(${globalIdx})">
+        <div style="font-size:2em;">${p.emoji}</div>
+        <div style="font-weight:700;font-size:0.85em;">${p.name}</div>
+        <div style="color:#9C27B0;font-size:0.8em;">🎟️ ${p.tickets} tickets</div>
+        <div style="color:#2E7D32;font-size:0.8em;">💰 $${p.price.toFixed(2)}</div>
+        ${!canTickets&&!canCash?'<div style="font-size:0.7em;color:#FF6B6B;">Can\'t afford yet</div>':''}
+      </div>`;
+    });
+    html+='</div>';
+  });
+  html+=`<div style="text-align:center;margin-top:14px;"><button class="btn-sm" onclick="buildPark()">⬅️ Back to Park Map</button></div></div>`;
+  document.getElementById('park-activity-area').innerHTML=html;
+}
+
+// Show a big friendly choice modal: tickets or money?
+function showPurchaseChoice(idx){
+  const prize = giftPrizes[idx];
+  const tickets = G.tickets||0;
+  const canTickets = tickets>=prize.tickets;
+  const canCash = G.money>=prize.price;
+
+  // Remove any existing choice modal
+  const existing = document.getElementById('purchase-choice-modal');
+  if(existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'purchase-choice-modal';
+  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;';
+  modal.innerHTML=`
+    <div style="background:white;border-radius:24px;padding:32px 28px;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+      <div style="font-size:4em;">${prize.emoji}</div>
+      <h2 style="font-family:'Fredoka One',cursive;color:#6A1B9A;font-size:1.5em;margin:10px 0;">${prize.name}</h2>
+      <p style="color:#555;margin-bottom:20px;font-size:1em;">How do you want to pay for this?</p>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <button onclick="confirmBuy(${idx},'tickets')"
+          style="background:${canTickets?'linear-gradient(135deg,#7B1FA2,#9C27B0)':'#DDD'};color:${canTickets?'white':'#999'};font-family:'Fredoka One',cursive;font-size:1.2em;padding:16px;border:none;border-radius:16px;cursor:${canTickets?'pointer':'not-allowed'};">
+          🎟️ Use My Tickets
+          <br><span style="font-size:0.65em;${canTickets?'opacity:0.9':''};">Cost: ${prize.tickets} tickets &nbsp;|&nbsp; You have: ${tickets}</span>
+          ${!canTickets?`<br><span style="font-size:0.6em;color:#FF5252;">You need ${prize.tickets-tickets} more tickets</span>`:''}
+        </button>
+
+        <button onclick="confirmBuy(${idx},'cash')"
+          style="background:${canCash?'linear-gradient(135deg,#1565C0,#1E88E5)':'#DDD'};color:${canCash?'white':'#999'};font-family:'Fredoka One',cursive;font-size:1.2em;padding:16px;border:none;border-radius:16px;cursor:${canCash?'pointer':'not-allowed'};">
+          💰 Use My Money
+          <br><span style="font-size:0.65em;${canCash?'opacity:0.9':''};">Cost: $${prize.price.toFixed(2)} &nbsp;|&nbsp; You have: $${G.money.toFixed(2)}</span>
+          ${!canCash?`<br><span style="font-size:0.6em;color:#FF5252;">Not enough cash</span>`:''}
+        </button>
+
+        <button onclick="document.getElementById('purchase-choice-modal').remove()"
+          style="background:#F5F5F5;color:#555;font-family:'Fredoka One',cursive;font-size:1em;padding:12px;border:none;border-radius:16px;cursor:pointer;">
+          ← Go Back
+        </button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function confirmBuy(idx, method){
+  const prize = giftPrizes[idx];
+  const tickets = G.tickets||0;
+  const modal = document.getElementById('purchase-choice-modal');
+
+  if(method==='tickets'){
+    if(tickets<prize.tickets){
+      alert(`You need ${prize.tickets} tickets but only have ${tickets}. Play more arcade games to earn more! 🕹️`);
+      return;
+    }
+    G.tickets -= prize.tickets;
+  } else {
+    if(G.money<prize.price){
+      alert(`You need $${prize.price.toFixed(2)} but only have $${G.money.toFixed(2)}. 💸`);
+      return;
+    }
+    G.money -= prize.price;
+    updateUI();
+  }
+
+  G.bookbag.push({...prize, cash: method==='cash'});
+  updateBookbagBtn();
+  if(modal) modal.remove();
+
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="store-section" style="text-align:center;">
+      <div style="font-size:4em;">${prize.emoji}</div>
+      <h3 style="font-family:'Fredoka One',cursive;color:var(--purple);font-size:1.5em;">You got a ${prize.name}! 🎉</h3>
+      <p style="margin:8px 0;">Paid with: ${method==='tickets'?`🎟️ ${prize.tickets} tickets (${G.tickets} left)`:`💰 $${prize.price.toFixed(2)} cash ($${G.money.toFixed(2)} left)`}</p>
+      <p style="color:#1565C0;margin-top:10px;">Check your <strong>🎒 My Bag</strong> button at the top to see all your prizes!</p>
+      <br>
+      <button class="btn-sm" onclick="showGiftShop()">🎁 Keep Shopping!</button>
+      <button class="btn-sm" onclick="buildPark()">🗺️ Park Map</button>
+    </div>`;
+  playSound('win');
+}
+
+function buyGiftShopItem(idx){ showPurchaseChoice(idx); }
+
+function updateBookbagBtn(){
+  const btn = document.getElementById('bookbag-btn');
+  if(btn) btn.textContent = `🎒 My Bag (${(G.bookbag||[]).length})`;
+}
+
+function showBookbag(){
+  const el = document.getElementById('bookbag-contents');
+  if(!el) return;
+  if(G.bookbag.length===0){
+    el.innerHTML=`<div style="text-align:center;padding:20px;color:#888;">
+      <div style="font-size:3em;">🎒</div>
+      <p>Your bag is empty! Win tickets at the Arcade and visit the Gift Shop to fill it up!</p>
+    </div>`;
+  } else {
+    el.innerHTML = G.bookbag.map(item=>`
+      <div style="display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid #EEE;">
+        <div style="font-size:2.5em;">${item.emoji}</div>
+        <div>
+          <div style="font-weight:700;color:#1E4D78;">${item.name}</div>
+          <div style="font-size:0.8em;color:#888;">Won with ${item.tickets} tickets${item.cash?' (paid cash)':''}</div>
+        </div>
+      </div>`).join('');
+  }
+  document.getElementById('bookbag-overlay').style.display='flex';
+}
+
+function closeBookbag(e){
+  if(e.target===document.getElementById('bookbag-overlay'))
+    document.getElementById('bookbag-overlay').style.display='none';
+}
+
+// ===== PARK QUESTION ENGINE =====
+let usedParkQIdxs=[];
+let poolArraySession={qs:[],current:0,active:false};
+function getParkQuestion(){
+  if(usedParkQIdxs.length>=parkAllQs.length) usedParkQIdxs=[];
+  let idx;
+  do{ idx=Math.floor(Math.random()*parkAllQs.length); }while(usedParkQIdxs.includes(idx));
+  usedParkQIdxs.push(idx);
+  return parkAllQs[idx];
+}
+
+function showParkQuestion(q, onCorrect, onBack){
+  if(!q){onCorrect();return;}  // clock keeps running at park
+  let viz='';
+  if(q.type==='array'){
+    viz='<div class="array-visual">';
+    for(let r=0;r<q.rows;r++){
+      viz+='<div class="array-row">';
+      for(let c=0;c<q.cols;c++) viz+='<div class="array-dot"></div>';
+      viz+='</div>';
+    }
+    viz+=`<div style="margin-top:8px;font-size:0.85em;color:#555;">📐 ${q.rows} rows × ${q.cols} columns — Count ALL the dots!</div></div>`;
+  }
+  if(q.type==='money'&&q.display){
+    viz=`<div style="font-size:1.8em;text-align:center;padding:10px;background:#FFFDF0;border-radius:10px;margin:10px 0;">${q.display}</div>`;
+  }
+  const badgeClass=q.type==='array'?'badge-array':'badge-money';
+  const badgeText=q.type==='array'?'🧮 Array Question':'💰 Money Question';
+  document.getElementById('park-areas-grid').innerHTML='';
+  document.getElementById('park-activity-area').innerHTML=`
+    <div class="question-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <div class="question-type-badge ${badgeClass}">${badgeText}</div>
+        <button onclick="backOutOfQuestion()" style="background:#FFE0E0;border:2px solid #FF6B6B;color:#C0392B;border-radius:20px;padding:5px 14px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:0.85em;">🚪 Back Out</button>
+      </div>
+      <div style="font-size:0.8em;color:#888;margin-bottom:6px;">Questions: ${G.parkQAnswered+1} of ${G.parkQRequired} total</div>
+      <div class="tip-box">💡 <strong>Helpful Tip:</strong> ${q.tip}</div>
+      <div class="question-text">${q.question}</div>
+      ${viz}
+      <div class="choices-grid" id="park-choices">
+        ${q.choices.map(c=>`<button class="choice-btn" onclick="checkParkAnswer(this,'${c}','${q.answer}')">${c}</button>`).join('')}
+      </div>
+      <div class="feedback-msg feedback-correct" id="park-fc">✅ Correct! You're a Math Star! 🌟</div>
+      <div class="feedback-msg feedback-wrong" id="park-fw">❌ Not quite! Read the tip and try again!</div>
+    </div>`;
+  window._parkOnCorrect=onCorrect;
+  window._parkOnBack=onBack||buildPark;
+  window._parkWrongAttempts=0;
+}
+
+function backOutOfQuestion(){
+  startMasterClock('park');
+  if(window._parkOnBack) window._parkOnBack();
+  else buildPark();
+}
+
+function checkParkAnswer(btn,chosen,correct){
+  const isOk=chosen.toString()===correct.toString();
+  if(isOk){
+    btn.classList.add('correct');
+    document.querySelectorAll('#park-choices .choice-btn').forEach(b=>b.disabled=true);
+    document.getElementById('park-fc').style.display='block';
+    playSound('correct');G.correctAnswers++;G.parkQAnswered++;
+    updateUI();
+    const tracker=document.getElementById('park-q-tracker');
+    if(tracker) tracker.textContent=`📋 Questions: ${G.parkQAnswered}/${G.parkQRequired} | 🎟️ Tickets: ${G.tickets||0}`;
+    startMasterClock('park');
+    setTimeout(()=>{if(window._parkOnCorrect) window._parkOnCorrect();},1800);
+  }else{
+    btn.classList.add('wrong');playSound('wrong');
+    window._parkWrongAttempts++;
+    document.getElementById('park-fw').style.display='block';
+    setTimeout(()=>{
+      btn.classList.remove('wrong');
+      document.getElementById('park-fw').style.display='none';
+    },900);
+  }
+}
+
+// ===== WIN / LOSE =====
+function winGame(){
+  stopMasterClock();stopClockCanvas();
+  if(gamePaused) togglePause();
+  showScreen('win-screen');playSound('win');
+  const stars=Math.max(1,5-G.misses);
+  document.getElementById('win-stars').textContent='⭐'.repeat(stars)+'☆'.repeat(5-stars);
+  document.getElementById('win-correct').textContent=G.correctAnswers;
+  document.getElementById('win-money').textContent=`$${G.money.toFixed(2)}`;
+  document.getElementById('win-tickets').textContent=`🎟️ ${G.tickets||0}`;
+}
+
+function loseGame(reason){
+  stopMasterClock();stopClockCanvas();
+  if(gamePaused) togglePause();
+  showScreen('lose-screen');
+  document.getElementById('lose-reason').textContent=reason;
+  playSound('wrong');
+}
+
+function confirmExit(){
+  // Stop everything immediately so nothing runs in background while modal is open
+  stopMasterClock();
+  stopClockCanvas();
+  // Stop lazy river if it's running
+  if(window._lazyState && window._lazyState.running){
+    window._lazyState.running = false;
+  }
+  if(window._lazyKeyHandler){
+    window.removeEventListener('keydown', window._lazyKeyHandler);
+    window._lazyKeyHandler = null;
+  }
+  // Show the exit modal
+  document.getElementById('exit-overlay').style.display = 'flex';
+}
+
+function cancelExit(){
+  document.getElementById('exit-overlay').style.display = 'none';
+  // Restart whichever clock phase was active
+  if(!gamePaused){
+    const active = document.querySelector('.screen.active');
+    if(active && active.id === 'road-screen') startMasterClock('road');
+    if(active && active.id === 'park-screen') startMasterClock('park');
+  }
+}
+
+function doExit(){
+  // Hide the overlay immediately
+  const overlay = document.getElementById('exit-overlay');
+  if(overlay) overlay.style.display = 'none';
+  restartGame();
+}
+
+function restartGame(){
+  // Stop all timers and animations
+  stopMasterClock(); stopClockCanvas();
+  if(window._lazyState) window._lazyState.running=false;
+  if(window._lazyKeyHandler){ window.removeEventListener('keydown',window._lazyKeyHandler); window._lazyKeyHandler=null; }
+  cancelAnimationFrame(balloonRAF);
+  cancelAnimationFrame(laserRAF);
+  balloonPopState=null; laserState=null;
+
+  // Close ALL overlays
+  ['exit-overlay','pause-overlay','bookbag-overlay','purchase-choice-modal'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.style.display='none';
+  });
+  document.querySelectorAll('[id$="-overlay"],[id$="-modal"]').forEach(el=>el.style.display='none');
+
+  // Reset pause state
+  if(gamePaused){ gamePaused=false; const pb=document.getElementById('pause-btn'); if(pb) pb.textContent='⏸️ Pause'; }
+
+  // Reset all game state
+  Object.assign(G,{
+    money:2000, cartTotal:0, cartItems:{}, misses:0, correctAnswers:0,
+    wrongAttemptsOnQuestion:0, roadQuestions:[], currentRoadQ:0,
+    gameTime:7*3600, alarmHour:6, stars:5,
+    parkQAnswered:0, parkQRequired:160,
+    lifeLineBonus:0, parkGameOver:false,
+    completedActivities:[], mandatoryCompleted:[],
+    tickets:0, arcadeGamesCompleted:0, arcadeCompleted:[], _arcadeSession:null,
+    foodItemsOrdered:0, foodMisses:0, foodMissesThisItem:0, currentFoodItem:null, foodQAnswered:0,
+    bookbag:[]
+  });
+  usedParkQIdxs=[];
+  poolArraySession={qs:[],current:0,active:false};
+
+  // Update UI and force welcome screen visible
+  updateUI();
+  updateBookbagBtn();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const welcome = document.getElementById('welcome-screen');
+  if(welcome) welcome.classList.add('active');
+}
+
+// ===== MODALS =====
+function showTips(){document.getElementById('tip-modal').style.display='flex';}
+function closeTipModal(e){if(e.target===document.getElementById('tip-modal'))document.getElementById('tip-modal').style.display='none';}
+function showVocab(){document.getElementById('vocab-modal').style.display='flex';}
+function closeVocabModal(e){if(e.target===document.getElementById('vocab-modal'))document.getElementById('vocab-modal').style.display='none';}
+
+updateUI();
+</script>
+</body>
+</html>
